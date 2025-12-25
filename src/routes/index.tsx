@@ -31,7 +31,7 @@ import { useAuth } from '../hooks/useAuth';
 
 function LandingWrapper() {
   const navigate = useNavigate();
-  return <Landing onGetStarted={() => navigate('/auth')} onParentView={() => navigate('/auth')} />;
+  return <Landing onGetStarted={() => navigate('/signup')} onParentView={() => navigate('/signup')} />;
 }
 
 function AuthWrapper() {
@@ -85,11 +85,7 @@ export function AppRoutes() {
       />
       <Route
         path="/auth"
-        element={
-          <Suspense fallback={<Loader fullScreen message="Loading..." />}>
-            <AuthWrapper />
-          </Suspense>
-        }
+        element={<Navigate to="/signup" replace />}
       />
       <Route
         path="/login"
