@@ -46,8 +46,8 @@ const SIZE_STYLES: Record<InputSize, { input: string; icon: string }> = {
 const STATE_STYLES: Record<InputState, string> = {
   default: `
     border-[var(--color-slate-300)]
-    focus:border-[var(--color-emerald-500)]
-    focus:ring-[var(--color-emerald-500)]
+    focus:border-[var(--color-purple-500)]
+    focus:ring-[var(--color-purple-500)]
   `,
   error: `
     border-[var(--color-error)]
@@ -55,9 +55,9 @@ const STATE_STYLES: Record<InputState, string> = {
     focus:ring-[var(--color-error)]
   `,
   success: `
-    border-[var(--color-emerald-500)]
-    focus:border-[var(--color-emerald-500)]
-    focus:ring-[var(--color-emerald-500)]
+    border-[var(--color-purple-500)]
+    focus:border-[var(--color-purple-500)]
+    focus:ring-[var(--color-purple-500)]
   `,
 };
 
@@ -135,7 +135,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               <AlertCircle className={`${sizeConfig.icon} text-[var(--color-error)]`} />
             )}
             {currentState === 'success' && !isPassword && (
-              <Check className={`${sizeConfig.icon} text-[var(--color-emerald-500)]`} />
+              <Check className={`${sizeConfig.icon} text-[var(--color-purple-500)]`} />
             )}
             {isPassword && (
               <button

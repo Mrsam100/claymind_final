@@ -59,7 +59,7 @@ const HOVER_STYLES = `
 const CLICKABLE_STYLES = `
   cursor-pointer
   hover:shadow-[var(--shadow-md)]
-  hover:border-[var(--color-emerald-300)]
+  hover:border-[var(--color-purple-300)]
   active:shadow-[var(--shadow-sm)]
   transition-all duration-[var(--transition-fast)]
 `;

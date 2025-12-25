@@ -143,8 +143,8 @@ export function Modules() {
                     <span>{module.duration}</span>
                   </div>
 
-                  {/* Progress Bar */}
-                  {!module.locked && module.progress > 0 && (
+                  {/* Progress Bar - Always show for unlocked modules */}
+                  {!module.locked && (
                     <div className="mb-4">
                       <div className="flex justify-between text-sm text-gray-600 mb-2">
                         <span>Progress</span>

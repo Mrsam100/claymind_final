@@ -25,8 +25,8 @@ const TYPE_ICONS = {
 
 const TYPE_COLORS: Record<string, string> = {
   Image: 'bg-[var(--color-slate-500)]',
-  Video: 'bg-[var(--color-emerald-500)]',
-  App: 'bg-[var(--color-emerald-600)]',
+  Video: 'bg-[var(--color-purple-500)]',
+  App: 'bg-[var(--color-purple-600)]',
   Other: 'bg-[var(--color-slate-400)]',
 };
 
@@ -117,8 +117,8 @@ export function ProjectCard({ project, index = 0, onView, onShare }: ProjectCard
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : shareSuccess ? (
                 <>
-                  <Check className="w-4 h-4 mr-1 text-[var(--color-emerald-500)]" />
-                  <span className="text-[var(--color-emerald-600)]">Copied!</span>
+                  <Check className="w-4 h-4 mr-1 text-[var(--color-purple-500)]" />
+                  <span className="text-[var(--color-purple-600)]">Copied!</span>
                 </>
               ) : (
                 <>

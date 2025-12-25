@@ -18,6 +18,7 @@ const KidDashboard = lazy(() => import('../features/dashboard').then(m => ({ def
 const ParentDashboard = lazy(() => import('../features/dashboard').then(m => ({ default: m.ParentDashboard })));
 const Modules = lazy(() => import('../features/modules').then(m => ({ default: m.Modules })));
 const ModuleDetail = lazy(() => import('../features/modules').then(m => ({ default: m.ModuleDetail })));
+const LessonPlayer = lazy(() => import('../features/modules').then(m => ({ default: m.LessonPlayer })));
 const AILab = lazy(() => import('../features/ai-lab').then(m => ({ default: m.AILab })));
 const Projects = lazy(() => import('../features/projects').then(m => ({ default: m.Projects })));
 const Profile = lazy(() => import('../features/profile').then(m => ({ default: m.Profile })));
@@ -149,6 +150,16 @@ export function AppRoutes() {
                 <ModuleDetailWrapper />
               </Suspense>
             </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/modules/:moduleId/lesson/:lessonId"
+        element={
+          <ProtectedRoute>
+            <Suspense fallback={<Loader fullScreen message="Loading..." />}>
+              <LessonPlayer />
+            </Suspense>
           </ProtectedRoute>
         }
       />

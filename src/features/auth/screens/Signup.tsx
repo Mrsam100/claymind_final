@@ -9,7 +9,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion } from 'motion/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, Calendar, Shield, AlertCircle, Loader2, Sparkles } from 'lucide-react';
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import { User, Mail, Lock, Calendar, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 import { Button3D } from '../../../app/components/3d-button';
 import { Card3D } from '../../../app/components/3d-card';
 import { FloatingMascot } from '../../../app/components/floating-mascot';
@@ -43,31 +44,17 @@ const signupSchema = z
       .min(8, 'You must be at least 8 years old')
       .max(16, 'Age must be 16 or under for kid accounts'),
     userType: z.enum(['kid', 'parent']),
-    parentEmail: z.string().email('Please enter a valid parent email').optional().or(z.literal('')),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ['confirmPassword'],
-  })
-  .refine(
-    (data) => {
-      // Parent email required for kids under 13
-      if (data.userType === 'kid' && data.age < 13) {
-        return !!data.parentEmail && data.parentEmail.length > 0;
-      }
-      return true;
-    },
-    {
-      message: 'Parent email is required for users under 13',
-      path: ['parentEmail'],
-    }
-  );
+  });
 
 type SignupFormData = z.infer<typeof signupSchema>;
 
 export function Signup() {
   const navigate = useNavigate();
-  const { signup, isLoading: authLoading } = useAuth();
+  const { signup, signInWithGoogle, isLoading: authLoading } = useAuth();
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
@@ -84,14 +71,11 @@ export function Signup() {
       confirmPassword: '',
       age: undefined,
       userType: 'kid',
-      parentEmail: '',
     },
   });
 
   const isLoading = authLoading || isSubmitting;
   const userType = watch('userType');
-  const age = watch('age');
-  const showParentEmail = userType === 'kid' && age !== undefined && age < 13;
 
   const onSubmit = async (data: SignupFormData) => {
     try {
@@ -110,7 +94,6 @@ export function Signup() {
         email: data.email,
         password: data.password,
         age: data.userType === 'kid' ? data.age : undefined,
-        parentEmail: data.parentEmail || undefined,
       });
 
       // Redirect based on user type
@@ -120,6 +103,26 @@ export function Signup() {
         error instanceof Error ? error.message : 'Signup failed. Please try again.';
       setSubmitError(errorMessage);
     }
+  };
+
+  const handleGoogleSuccess = async (response: CredentialResponse) => {
+    try {
+      setSubmitError(null);
+      if (!response.credential) {
+        throw new Error('No credential received from Google');
+      }
+
+      await signInWithGoogle(response.credential);
+      navigate('/kid-dashboard');
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Google Sign In failed. Please try again.';
+      setSubmitError(errorMessage);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setSubmitError('Google Sign In failed. Please try again.');
   };
 
   return (
@@ -222,6 +225,35 @@ export function Signup() {
               </motion.label>
             </div>
 
+            {/* Google Sign In - Temporarily Disabled */}
+            {/*
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-full flex items-center gap-4">
+                <div className="flex-1 h-px bg-gray-300" />
+                <span className="text-sm text-gray-500 font-medium">OR</span>
+                <div className="flex-1 h-px bg-gray-300" />
+              </div>
+
+              <div className="w-full flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  useOneTap
+                  text="signup_with"
+                  shape="pill"
+                  size="large"
+                  theme="outline"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="flex-1 h-px bg-gray-300" />
+              <span className="text-sm text-gray-500 font-medium">Or sign up with email</span>
+              <div className="flex-1 h-px bg-gray-300" />
+            </div>
+            */}
+
             {/* Form Fields */}
             <div className="space-y-4">
               {/* First Name Field */}
@@ -235,7 +267,7 @@ export function Signup() {
                     {...register('firstName')}
                     id="firstName"
                     type="text"
-                    placeholder="Enter your first name"
+                    placeholder="e.g., Sarah"
                     disabled={isLoading}
                     aria-invalid={!!errors.firstName}
                     className={`w-full pl-12 pr-6 py-4 rounded-2xl bg-purple-50 border-2 transition-all outline-none ${
@@ -261,7 +293,7 @@ export function Signup() {
                     {...register('email')}
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder="e.g., sarah@example.com"
                     disabled={isLoading}
                     aria-invalid={!!errors.email}
                     className={`w-full pl-12 pr-6 py-4 rounded-2xl bg-purple-50 border-2 transition-all outline-none ${
@@ -288,7 +320,7 @@ export function Signup() {
                       {...register('age', { valueAsNumber: true })}
                       id="age"
                       type="number"
-                      placeholder="How old are you?"
+                      placeholder="Enter your age (8-16)"
                       min="8"
                       max="16"
                       disabled={isLoading}
@@ -306,38 +338,6 @@ export function Signup() {
                 </div>
               )}
 
-              {/* Parent Email (Required for kids under 13) */}
-              {showParentEmail && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                >
-                  <label htmlFor="parentEmail" className="block text-gray-700 mb-2 font-medium">
-                    Parent's Email <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      {...register('parentEmail')}
-                      id="parentEmail"
-                      type="email"
-                      placeholder="Enter your parent's email"
-                      disabled={isLoading}
-                      aria-invalid={!!errors.parentEmail}
-                      className={`w-full pl-12 pr-6 py-4 rounded-2xl bg-purple-50 border-2 transition-all outline-none ${
-                        errors.parentEmail
-                          ? 'border-red-400 focus:border-red-500'
-                          : 'border-purple-100 focus:border-purple-500'
-                      } disabled:opacity-50 disabled:cursor-not-allowed`}
-                    />
-                  </div>
-                  {errors.parentEmail && (
-                    <p className="mt-2 text-sm text-red-600">{errors.parentEmail.message}</p>
-                  )}
-                </motion.div>
-              )}
-
               {/* Password Field */}
               <div>
                 <label htmlFor="password" className="block text-gray-700 mb-2 font-medium">
@@ -349,7 +349,7 @@ export function Signup() {
                     {...register('password')}
                     id="password"
                     type="password"
-                    placeholder="Create a password"
+                    placeholder="e.g., MyPass123"
                     disabled={isLoading}
                     aria-invalid={!!errors.password}
                     className={`w-full pl-12 pr-6 py-4 rounded-2xl bg-purple-50 border-2 transition-all outline-none ${
@@ -359,8 +359,12 @@ export function Signup() {
                     } disabled:opacity-50 disabled:cursor-not-allowed`}
                   />
                 </div>
-                {errors.password && (
+                {errors.password ? (
                   <p className="mt-2 text-sm text-red-600">{errors.password.message}</p>
+                ) : (
+                  <p className="mt-2 text-sm text-gray-500">
+                    Must be 8+ characters with uppercase, lowercase, and a number
+                  </p>
                 )}
               </div>
 
@@ -419,19 +423,6 @@ export function Signup() {
                 Sign in
               </Link>
             </div>
-
-            {/* Safety Notice for Kids */}
-            {userType === 'kid' && (
-              <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4">
-                <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-amber-800">
-                    <strong>Stay Safe:</strong> Always get permission from a parent or guardian
-                    before signing up!
-                  </p>
-                </div>
-              </div>
-            )}
           </form>
         </Card3D>
       </div>

@@ -38,11 +38,11 @@ const BADGE_ICONS: Record<string, React.ReactNode> = {
 };
 
 const AVATAR_COLORS: Record<string, string> = {
-  purple: 'bg-[var(--color-emerald-500)]',
+  purple: 'bg-[var(--color-purple-500)]',
   amber: 'bg-[var(--color-amber-500)]',
   pink: 'bg-[var(--color-slate-500)]',
-  blue: 'bg-[var(--color-emerald-600)]',
-  green: 'bg-[var(--color-emerald-400)]',
+  blue: 'bg-[var(--color-purple-600)]',
+  green: 'bg-[var(--color-purple-400)]',
   red: 'bg-[var(--color-amber-600)]',
 };
 
@@ -146,7 +146,7 @@ export function Profile() {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Profile Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-          <Card variant="default" padding="lg" className="bg-[var(--color-emerald-500)]">
+          <Card variant="default" padding="lg" className="bg-[var(--color-purple-500)]">
             <div className="flex flex-col md:flex-row items-center gap-6">
               {/* Avatar */}
               <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
@@ -196,7 +196,7 @@ export function Profile() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-[var(--color-slate-900)]">Customize Your Avatar</h2>
               {savingAvatar && (
-                <div className="flex items-center gap-2 text-[var(--color-emerald-600)]">
+                <div className="flex items-center gap-2 text-[var(--color-purple-600)]">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   <span className="text-sm">Saving...</span>
                 </div>
@@ -204,7 +204,7 @@ export function Profile() {
               {avatarMessage && (
                 <div
                   className={`flex items-center gap-2 text-sm ${
-                    avatarMessage.type === 'success' ? 'text-[var(--color-emerald-600)]' : 'text-[var(--color-error)]'
+                    avatarMessage.type === 'success' ? 'text-[var(--color-purple-600)]' : 'text-[var(--color-error)]'
                   }`}
                 >
                   {avatarMessage.type === 'success' ? (
@@ -222,7 +222,7 @@ export function Profile() {
                 <button
                   key={avatar.id}
                   className={`aspect-square rounded-xl ${AVATAR_COLORS[avatar.color] || 'bg-[var(--color-slate-400)]'} flex items-center justify-center text-3xl transition-all ${
-                    avatar.id === selectedAvatarId ? 'ring-2 ring-[var(--color-emerald-500)] ring-offset-2' : ''
+                    avatar.id === selectedAvatarId ? 'ring-2 ring-[var(--color-purple-500)] ring-offset-2' : ''
                   } ${savingAvatar ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}`}
                   onClick={() => handleAvatarSelect(avatar.id)}
                   disabled={savingAvatar}
@@ -300,7 +300,7 @@ export function Profile() {
                     </p>
                   </div>
                   {achievement.unlocked && (
-                    <div className="bg-[var(--color-emerald-100)] text-[var(--color-emerald-700)] px-2 py-1 rounded text-xs font-medium">
+                    <div className="bg-[var(--color-purple-100)] text-[var(--color-purple-700)] px-2 py-1 rounded text-xs font-medium">
                       Unlocked
                     </div>
                   )}
@@ -317,7 +317,7 @@ export function Profile() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <Card variant="default" padding="lg" className="bg-[var(--color-emerald-500)]">
+            <Card variant="default" padding="lg" className="bg-[var(--color-purple-500)]">
               <div className="text-center">
                 <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-white/20 flex items-center justify-center">
                   <Target className="w-5 h-5 text-white" />

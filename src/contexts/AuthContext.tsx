@@ -14,6 +14,7 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   login: (credentials: LoginRequest) => Promise<void>;
   signup: (data: SignupRequest) => Promise<void>;
+  signInWithGoogle: (googleCredential: string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
 }
@@ -34,7 +35,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const checkAuth = useCallback(async () => {
     try {
       setIsLoading(true);
-      const currentUser = await authService.checkAuth();
+      const currentUser = authService.getCurrentUser();
       setUser(currentUser);
       if (currentUser) {
         errorLoggingService.setUser({ id: currentUser.id, email: currentUser.email });
@@ -53,9 +54,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = useCallback(async (credentials: LoginRequest) => {
     try {
       setIsLoading(true);
-      const loggedInUser = await authService.login(credentials);
-      setUser(loggedInUser);
-      errorLoggingService.setUser({ id: loggedInUser.id, email: loggedInUser.email });
+      const result = await authService.login(credentials);
+
+      if (!result.success || !result.user) {
+        throw new Error(result.error || 'Login failed');
+      }
+
+      setUser(result.user);
+      errorLoggingService.setUser({ id: result.user.id, email: result.user.email });
     } catch (error) {
       errorLoggingService.logAuthError(error instanceof Error ? error : new Error(String(error)), 'login');
       throw error;
@@ -70,11 +76,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const signup = useCallback(async (data: SignupRequest) => {
     try {
       setIsLoading(true);
-      const newUser = await authService.signup(data);
-      setUser(newUser);
-      errorLoggingService.setUser({ id: newUser.id, email: newUser.email });
+      const result = await authService.signup(data);
+
+      if (!result.success || !result.user) {
+        throw new Error(result.error || 'Signup failed');
+      }
+
+      setUser(result.user);
+      errorLoggingService.setUser({ id: result.user.id, email: result.user.email });
     } catch (error) {
       errorLoggingService.logAuthError(error instanceof Error ? error : new Error(String(error)), 'signup');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  /**
+   * Sign in with Google
+   */
+  const signInWithGoogle = useCallback(async (googleCredential: string) => {
+    try {
+      setIsLoading(true);
+      const result = await authService.signInWithGoogle(googleCredential);
+
+      if (!result.success || !result.user) {
+        throw new Error(result.error || 'Google Sign In failed');
+      }
+
+      setUser(result.user);
+      errorLoggingService.setUser({ id: result.user.id, email: result.user.email });
+    } catch (error) {
+      errorLoggingService.logAuthError(error instanceof Error ? error : new Error(String(error)), 'signInWithGoogle');
       throw error;
     } finally {
       setIsLoading(false);
@@ -110,6 +143,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isAuthenticated: user !== null,
     login,
     signup,
+    signInWithGoogle,
     logout,
     checkAuth,
   };

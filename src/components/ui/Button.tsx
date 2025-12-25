@@ -26,9 +26,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
   primary: `
-    bg-[var(--color-emerald-500)]
-    hover:bg-[var(--color-emerald-600)]
-    active:bg-[var(--color-emerald-700)]
+    bg-[var(--color-purple-500)]
+    hover:bg-[var(--color-purple-600)]
+    active:bg-[var(--color-purple-700)]
     text-white
     border-transparent
   `,
@@ -108,7 +108,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           font-semibold
           border
           transition-colors duration-[var(--transition-fast)]
-          focus:outline-none focus:ring-2 focus:ring-[var(--color-emerald-500)] focus:ring-offset-2
+          focus:outline-none focus:ring-2 focus:ring-[var(--color-purple-500)] focus:ring-offset-2
           disabled:opacity-50 disabled:cursor-not-allowed
           ${VARIANT_STYLES[variant]}
           ${SIZE_STYLES[size]}

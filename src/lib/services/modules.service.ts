@@ -5,6 +5,7 @@
 
 import { api } from '../api';
 import { errorLoggingService } from './error-logging.service';
+import { storageService } from './storage.service';
 import type { Module, ModuleDetail } from '../types/api';
 
 export interface LessonProgress {
@@ -117,7 +118,7 @@ class ModulesService {
   }
 
   /**
-   * Complete a lesson - marks lesson as completed and updates progress
+   * Complete a lesson - REAL PROGRESS TRACKING
    */
   async completeLesson(moduleId: string, lessonId: string): Promise<CompleteLessonResult> {
     try {
@@ -127,19 +128,61 @@ class ModulesService {
         level: 'info',
       });
 
-      // Stub: In production, this would call an API endpoint
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Mark lesson as completed in storage
+      storageService.completLesson(moduleId, lessonId);
 
-      // Calculate next lesson (stub logic)
+      // Award XP (50 XP per lesson)
+      const xpResult = storageService.addXP(50);
+
+      // Get module info to update progress
+      const modules = await this.getModules();
+      const module = modules.find((m) => m.id === moduleId);
+      const totalLessons = module?.totalLessons || 8;
+
+      // Get completed lessons count
+      const completedLessons = storageService.getCompletedLessonsForModule(moduleId);
+
+      // Update module progress
+      storageService.updateModuleProgress(moduleId, {
+        completedLessons: completedLessons.length,
+        totalLessons,
+      });
+
+      // Calculate next lesson
       const nextLessonId = String(parseInt(lessonId) + 1);
+      const moduleCompleted = completedLessons.length >= totalLessons;
+
+      // Award badge if module completed
+      if (moduleCompleted) {
+        storageService.awardBadge({
+          id: `module-${moduleId}-complete`,
+          name: `${module?.title || 'Module'} Master`,
+          description: `Completed all lessons in ${module?.title || 'this module'}!`,
+          icon: '🏆',
+          category: 'module',
+        });
+      }
+
+      // Award first lesson badge
+      if (completedLessons.length === 1) {
+        storageService.awardBadge({
+          id: 'first-lesson',
+          name: 'First Steps',
+          description: 'Completed your first lesson!',
+          icon: '🎯',
+          category: 'achievement',
+        });
+      }
 
       return {
         success: true,
         lessonId,
         xpEarned: 50,
-        message: 'Great job! Lesson completed!',
+        message: xpResult.leveledUp
+          ? `🎉 Level Up! You're now level ${xpResult.newLevel}!`
+          : 'Great job! Lesson completed!',
         nextLessonId,
-        moduleCompleted: false,
+        moduleCompleted,
       };
     } catch (error) {
       errorLoggingService.logError(

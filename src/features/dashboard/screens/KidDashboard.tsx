@@ -28,7 +28,7 @@ export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects
   };
 
   const stats = [
-    { label: "Lessons Completed", value: "24", color: "text-[var(--color-emerald-600)]" },
+    { label: "Lessons Completed", value: "24", color: "text-[var(--color-purple-600)]" },
     { label: "Projects Built", value: "8", color: "text-[var(--color-amber-600)]" },
     { label: "Badges Earned", value: "12", color: "text-[var(--color-slate-600)]" },
   ];
@@ -41,7 +41,7 @@ export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card variant="default" padding="lg" className="bg-[var(--color-emerald-500)]">
+          <Card variant="default" padding="lg" className="bg-[var(--color-purple-500)]">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center">
@@ -93,7 +93,7 @@ export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card variant="default" padding="lg" className="bg-[var(--color-emerald-600)]">
+            <Card variant="default" padding="lg" className="bg-[var(--color-purple-600)]">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
@@ -146,8 +146,8 @@ export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects
           >
             <Card variant="default" padding="md" clickable onClick={onViewModules}>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[var(--color-emerald-100)] flex items-center justify-center">
-                  <Brain className="w-5 h-5 text-[var(--color-emerald-600)]" />
+                <div className="w-10 h-10 rounded-lg bg-[var(--color-purple-100)] flex items-center justify-center">
+                  <Brain className="w-5 h-5 text-[var(--color-purple-600)]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-[var(--color-slate-900)]">Browse Modules</h3>
@@ -180,7 +180,7 @@ export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-[var(--color-slate-900)]">Your Badges</h2>
-                <span className="text-[var(--color-emerald-600)] text-sm">12 / 20 Unlocked</span>
+                <span className="text-[var(--color-purple-600)] text-sm">12 / 20 Unlocked</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

@@ -6,6 +6,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { config } from './config';
 import { errorLoggingService } from './services/error-logging.service';
+import { authService } from './services/auth.service';
+import { storageService } from './services/storage.service';
 import type {
   AuthResponse,
   LoginRequest,
@@ -203,92 +205,100 @@ class ApiClient {
   // ==================== Authentication Endpoints ====================
 
   /**
-   * Login user
+   * Login user - REAL AUTHENTICATION
    */
   async login(credentials: LoginRequest): Promise<AuthResponse> {
-    return this.stubRequest<AuthResponse>(
-      () => this.client.post('/auth/login', credentials),
-      {
-        success: true,
-        accessToken: 'mock-access-token-' + Date.now(),
-        refreshToken: 'mock-refresh-token-' + Date.now(),
-        user: {
-          id: 'user-1',
-          firstName: credentials.email.split('@')[0],
-          email: credentials.email,
-          age: 12,
-          level: 5,
-          avatarUrl: '/avatars/clai.png',
-          accountStatus: 'active',
-          username: 'AIExplorer_Alex',
-          displayName: credentials.email.split('@')[0],
-          joinedDate: 'Nov 2024',
-        },
-      }
-    );
+    // Use real authentication service
+    const result = await authService.login({
+      email: credentials.email,
+      password: credentials.password,
+    });
+
+    if (!result.success || !result.user) {
+      throw new Error(result.error || 'Login failed');
+    }
+
+    // Store tokens
+    if (result.accessToken) {
+      this.setAccessToken(result.accessToken);
+    }
+    if (result.refreshToken) {
+      this.setRefreshToken(result.refreshToken);
+    }
+
+    return {
+      success: true,
+      accessToken: result.accessToken || '',
+      refreshToken: result.refreshToken || '',
+      user: result.user,
+      message: 'Login successful',
+    };
   }
 
   /**
-   * Signup new user
+   * Signup new user - REAL AUTHENTICATION
    */
   async signup(data: SignupRequest): Promise<AuthResponse> {
-    return this.stubRequest<AuthResponse>(
-      () => this.client.post('/auth/signup', data),
-      {
-        success: true,
-        accessToken: 'mock-access-token-' + Date.now(),
-        refreshToken: 'mock-refresh-token-' + Date.now(),
-        user: {
-          id: 'user-' + Date.now(),
-          firstName: data.firstName,
-          email: data.email,
-          age: data.age,
-          level: 1,
-          avatarUrl: '/avatars/clai.png',
-          accountStatus: 'active',
-          username: data.firstName + '_' + Math.floor(Math.random() * 1000),
-          displayName: data.firstName,
-          joinedDate: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
-        },
-        message: 'Account created successfully',
-      }
-    );
+    // Use real authentication service
+    const result = await authService.signup({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+      age: data.age,
+      parentEmail: data.parentEmail,
+    });
+
+    if (!result.success || !result.user) {
+      throw new Error(result.error || 'Signup failed');
+    }
+
+    // Store tokens
+    if (result.accessToken) {
+      this.setAccessToken(result.accessToken);
+    }
+    if (result.refreshToken) {
+      this.setRefreshToken(result.refreshToken);
+    }
+
+    return {
+      success: true,
+      accessToken: result.accessToken || '',
+      refreshToken: result.refreshToken || '',
+      user: result.user,
+      message: 'Account created successfully! Welcome to ClayMind!',
+    };
   }
 
   /**
-   * Logout user
+   * Logout user - REAL LOGOUT
    */
   async logout(): Promise<ApiResponse> {
-    return this.stubRequest<ApiResponse>(
-      () => this.client.post('/auth/logout'),
-      {
-        success: true,
-        message: 'Logged out successfully',
-      }
-    );
+    await authService.logout();
+    this.clearTokens();
+
+    return {
+      success: true,
+      message: 'Logged out successfully',
+    };
   }
 
   // ==================== User Endpoints ====================
 
   /**
-   * Get current user profile
+   * Get current user profile - REAL DATA
    */
   async getUserProfile(): Promise<User> {
-    return this.stubRequest<User>(
-      () => this.client.get('/user/profile'),
-      {
-        id: 'user-1',
-        firstName: 'Alex',
-        email: 'alex@example.com',
-        age: 12,
-        level: 8,
-        avatarUrl: '/avatars/clai.png',
-        accountStatus: 'active',
-        username: 'AIExplorer_Alex',
-        displayName: 'Alex',
-        joinedDate: 'Nov 2024',
-      }
-    );
+    const user = authService.getCurrentUser();
+    if (!user) {
+      throw new Error('Not authenticated');
+    }
+
+    // Update level from progress
+    const progress = storageService.getProgress();
+    user.level = progress.currentLevel;
+
+    return user;
   }
 
   /**
@@ -310,107 +320,87 @@ class ApiClient {
   }
 
   /**
-   * Get user progress
+   * Get user progress - REAL DATA
    */
   async getUserProgress(): Promise<UserProgress> {
-    return this.stubRequest<UserProgress>(
-      () => this.client.get('/user/progress'),
-      {
-        totalXp: 1450,
-        currentLevel: 8,
-        xpToNextLevel: 550,
-        xpRequiredForNextLevel: 2000,
-        progressPercentage: 65,
-        totalTimeMinutes: 320,
-        activeTimeMinutes: 280,
-        missionsCompleted: 18,
-        lessonsCompleted: 24,
-        questionsAnswered: 234,
-        questionsCorrect: 198,
-        averageAccuracy: 84.62,
-        currentStreakDays: 7,
-        longestStreakDays: 12,
-        lastActivityDate: new Date().toISOString().split('T')[0],
-        badgesEarned: 12,
-        coins: 1250,
-        keys: 8,
-        seasonXp: 450,
-        seasonLevel: 3,
-      }
-    );
+    // Get real progress from storage
+    return storageService.getProgress();
   }
 
   // ==================== Modules Endpoints ====================
 
   /**
-   * Get all modules
+   * Get all modules - WITH REAL PROGRESS
    */
   async getModules(): Promise<Module[]> {
-    return this.stubRequest<Module[]>(
-      () => this.client.get('/modules'),
-      [
-        {
-          id: 'ai-basics',
-          title: 'AI Basics',
-          description: 'Learn what AI is and how it works',
-          difficulty: 1,
-          lessons: 8,
-          duration: '2 hours',
-          color: 'purple',
-          locked: false,
-          progress: 100,
-          totalLessons: 8,
-        },
-        {
-          id: 'build-app',
-          title: 'Build an App with AI',
-          description: 'Create your first AI-powered application',
-          difficulty: 2,
-          lessons: 12,
-          duration: '4 hours',
-          color: 'amber',
-          locked: false,
-          progress: 60,
-          totalLessons: 12,
-        },
-        {
-          id: 'image-creation',
-          title: 'Image & Video Creation',
-          description: 'Generate amazing images with AI',
-          difficulty: 2,
-          lessons: 10,
-          duration: '3 hours',
-          color: 'pink',
-          locked: false,
-          progress: 30,
-          totalLessons: 10,
-        },
-        {
-          id: 'video-creation',
-          title: 'AI Video Magic',
-          description: 'Create and edit videos using AI tools',
-          difficulty: 3,
-          lessons: 15,
-          duration: '5 hours',
-          color: 'blue',
-          locked: false,
-          progress: 0,
-          totalLessons: 15,
-        },
-        {
-          id: 'ml-mini',
-          title: 'Mini Machine Learning',
-          description: 'Train your own AI models',
-          difficulty: 3,
-          lessons: 20,
-          duration: '6 hours',
-          color: 'green',
-          locked: true,
-          progress: 0,
-          totalLessons: 20,
-        },
-      ]
-    );
+    // Get real progress from storage
+    const moduleProgress = storageService.getModuleProgress();
+
+    // Define all available modules
+    const modules: Module[] = [
+      {
+        id: 'ai-basics',
+        title: 'AI Basics',
+        description: 'Learn what AI is and how it works',
+        difficulty: 1,
+        lessons: 8,
+        duration: '2 hours',
+        color: 'purple',
+        locked: false,
+        progress: moduleProgress['ai-basics']?.progress || 0,
+        totalLessons: 8,
+      },
+      {
+        id: 'ml-mini',
+        title: 'Mini Machine Learning',
+        description: 'Train your own AI models',
+        difficulty: 2,
+        lessons: 8,
+        duration: '3 hours',
+        color: 'green',
+        locked: false,
+        progress: moduleProgress['ml-mini']?.progress || 0,
+        totalLessons: 8,
+      },
+      {
+        id: 'build-app',
+        title: 'Build an App with AI',
+        description: 'Create your first AI-powered application',
+        difficulty: 2,
+        lessons: 12,
+        duration: '4 hours',
+        color: 'amber',
+        locked: false,
+        progress: moduleProgress['build-app']?.progress || 0,
+        totalLessons: 12,
+      },
+      {
+        id: 'image-creation',
+        title: 'Image & Video Creation',
+        description: 'Generate amazing images with AI',
+        difficulty: 2,
+        lessons: 10,
+        duration: '3 hours',
+        color: 'pink',
+        locked: false,
+        progress: moduleProgress['image-creation']?.progress || 0,
+        totalLessons: 10,
+      },
+      {
+        id: 'video-creation',
+        title: 'AI Video Magic',
+        description: 'Create and edit videos using AI tools',
+        difficulty: 3,
+        lessons: 15,
+        duration: '5 hours',
+        color: 'blue',
+        locked: false,
+        progress: moduleProgress['video-creation']?.progress || 0,
+        totalLessons: 15,
+      },
+    ];
+
+    return modules;
   }
 
   /**

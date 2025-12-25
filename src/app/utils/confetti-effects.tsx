@@ -499,3 +499,114 @@ export function FloatingText({ text, x, y, color = "#2D9CDB", size = "md", icon 
     </motion.div>
   );
 }
+
+// ==================== SIMPLE CONFETTI TRIGGER ====================
+
+/**
+ * Simple function to trigger confetti without hooks
+ * Creates a temporary element to render confetti
+ */
+export function triggerConfetti(options: ConfettiOptions = {}) {
+  if (typeof window === 'undefined') return;
+
+  const {
+    particleCount = 100,
+    origin = { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+  } = options;
+
+  // Create container
+  const container = document.createElement('div');
+  container.style.position = 'fixed';
+  container.style.top = '0';
+  container.style.left = '0';
+  container.style.width = '100%';
+  container.style.height = '100%';
+  container.style.pointerEvents = 'none';
+  container.style.zIndex = '9999';
+  document.body.appendChild(container);
+
+  // Create canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  container.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    document.body.removeChild(container);
+    return;
+  }
+
+  // Create particles
+  const particles: ConfettiParticle[] = [];
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(createConfettiParticle(origin.x, origin.y, i));
+  }
+
+  // Animate
+  let animationFrame: number;
+  let lastTime = Date.now();
+
+  const animate = () => {
+    const now = Date.now();
+    const deltaTime = (now - lastTime) / 16.67;
+    lastTime = now;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const remainingParticles = particles.filter((particle) => {
+      // Update physics
+      particle.velocityY += particle.gravity * deltaTime;
+      particle.x += particle.velocityX * deltaTime;
+      particle.y += particle.velocityY * deltaTime;
+      particle.rotation += particle.rotationSpeed * deltaTime;
+
+      // Remove if off-screen
+      if (particle.y > canvas.height + 50) return false;
+
+      // Draw
+      ctx.save();
+      ctx.translate(particle.x, particle.y);
+      ctx.rotate((particle.rotation * Math.PI) / 180);
+      ctx.fillStyle = particle.color;
+
+      switch (particle.shape) {
+        case 'circle':
+          ctx.beginPath();
+          ctx.arc(0, 0, particle.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+          break;
+        case 'square':
+          ctx.fillRect(-particle.size / 2, -particle.size / 2, particle.size, particle.size);
+          break;
+        case 'triangle':
+          ctx.beginPath();
+          ctx.moveTo(0, -particle.size / 2);
+          ctx.lineTo(particle.size / 2, particle.size / 2);
+          ctx.lineTo(-particle.size / 2, particle.size / 2);
+          ctx.closePath();
+          ctx.fill();
+          break;
+        case 'star':
+          drawStar(ctx, 0, 0, 5, particle.size / 2, particle.size / 4);
+          ctx.fill();
+          break;
+      }
+
+      ctx.restore();
+      return true;
+    });
+
+    if (remainingParticles.length > 0) {
+      particles.length = 0;
+      particles.push(...remainingParticles);
+      animationFrame = requestAnimationFrame(animate);
+    } else {
+      // Cleanup
+      cancelAnimationFrame(animationFrame);
+      document.body.removeChild(container);
+    }
+  };
+
+  animationFrame = requestAnimationFrame(animate);
+}

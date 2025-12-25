@@ -60,7 +60,7 @@ export function Projects() {
   }, []);
 
   const statsDisplay = [
-    { label: 'Total Projects', value: stats.total, color: 'text-[var(--color-emerald-600)]' },
+    { label: 'Total Projects', value: stats.total, color: 'text-[var(--color-purple-600)]' },
     { label: 'This Month', value: stats.thisMonth, color: 'text-[var(--color-amber-600)]' },
     { label: 'Shared', value: stats.shared, color: 'text-[var(--color-slate-600)]' },
   ];
@@ -140,7 +140,7 @@ export function Projects() {
               onAction={handleNewProject}
               actionText="Create Your First Project"
               actionIcon={<Plus className="w-5 h-5" />}
-              icon={<FolderOpen className="w-10 h-10 text-[var(--color-emerald-500)]" />}
+              icon={<FolderOpen className="w-10 h-10 text-[var(--color-purple-500)]" />}
             />
           )}
 
@@ -166,7 +166,7 @@ export function Projects() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card variant="default" padding="lg" className="text-center bg-[var(--color-emerald-500)]">
+          <Card variant="default" padding="lg" className="text-center bg-[var(--color-purple-500)]">
             <h3 className="text-xl font-bold text-white mb-2">Keep Creating!</h3>
             <p className="text-white/90 mb-4">
               What will you create next?
