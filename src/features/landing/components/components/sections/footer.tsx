@@ -43,9 +43,9 @@ const footerLinks = [
   {
     category: 'SOCIALS',
     links: [
-      { label: 'LinkedIn', href: 'https://linkedin.com/company/claymind' },
-      { label: 'X', href: 'https://x.com/claymind' },
-      { label: 'Instagram', href: 'https://instagram.com/claymind' },
+      { label: 'LinkedIn', href: 'https://linkedin.com/company/clayrock' },
+      { label: 'X', href: 'https://x.com/clayrock' },
+      { label: 'Instagram', href: 'https://instagram.com/clayrock' },
     ],
   },
   {
@@ -61,7 +61,7 @@ const footerLinks = [
     links: [
       { label: 'Discord', href: '/discord' },
       { label: 'Help Center', href: '/help' },
-      { label: 'Contact Us', href: 'mailto:hello@claymind.ai' },
+      { label: 'Contact Us', href: 'mailto:hello@clayrock.ai' },
     ],
   },
 ];

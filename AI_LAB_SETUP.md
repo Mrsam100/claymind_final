@@ -28,7 +28,7 @@ Your AI Lab is now fully built with amazing animations and kid-friendly UI! Just
 
 ### Create `.env` file:
 
-In the `claymind` folder, create a file named `.env` (not `.env.example`):
+In the `clayrock` folder, create a file named `.env` (not `.env.example`):
 
 ```env
 VITE_GEMINI_API_KEY=AIza...your_actual_key_here

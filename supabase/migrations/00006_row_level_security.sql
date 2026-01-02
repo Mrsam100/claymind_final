@@ -1,4 +1,4 @@
--- ClayMind Row Level Security (RLS) Policies
+-- ClayRock Row Level Security (RLS) Policies
 -- Description: Secure data access with child-safe policies
 -- Date: 2025-01-01
 

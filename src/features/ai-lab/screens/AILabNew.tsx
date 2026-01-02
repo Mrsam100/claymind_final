@@ -127,7 +127,7 @@ export function AILabNew() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `claymind-${result.type}-${Date.now()}.html`;
+    a.download = `clayrock-${result.type}-${Date.now()}.html`;
     a.click();
     URL.revokeObjectURL(url);
   };

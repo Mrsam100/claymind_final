@@ -8,7 +8,7 @@ import { errorLoggingService } from './error-logging.service';
 import { projectsService } from './projects.service';
 import type { AIGenerateResponse } from '../types/api';
 
-const HISTORY_KEY = 'claymind_ai_lab_history';
+const HISTORY_KEY = 'clayrock_ai_lab_history';
 const MAX_HISTORY_ITEMS = 20;
 
 export interface GenerationHistoryItem {

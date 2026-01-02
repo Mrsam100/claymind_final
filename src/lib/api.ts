@@ -266,7 +266,7 @@ class ApiClient {
       accessToken: result.accessToken || '',
       refreshToken: result.refreshToken || '',
       user: result.user,
-      message: 'Account created successfully! Welcome to ClayMind!',
+      message: 'Account created successfully! Welcome to ClayRock!',
     };
   }
 
@@ -556,7 +556,7 @@ class ApiClient {
           answer: 'Just sign up, choose a module that interests you, and start with the first lesson!',
         },
         {
-          question: 'Is ClayMind really safe for kids?',
+          question: 'Is ClayRock really safe for kids?',
           answer: 'Yes! We have content filters, parental controls, and all activities are monitored to ensure a safe learning environment.',
         },
         {

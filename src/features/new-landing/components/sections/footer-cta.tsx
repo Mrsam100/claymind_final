@@ -9,7 +9,7 @@ const FooterCTA = () => {
         <div className="relative aspect-square w-full max-w-[500px]">
           {/* Main dithered image of person */}
           <Image
-            src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/6904ecb796a3a4e6677d57b1_0d6518f118014c5cbc6b19710-28.avif"
+            src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/6904ecb796a3a4e6677d57b1_0d6518f118014c5cbc6b19710-28.avif"
             alt="Person with digital cloud interface"
             fill
             className="object-cover grayscale"
@@ -19,7 +19,7 @@ const FooterCTA = () => {
           <div 
             className="absolute inset-0 opacity-40 pointer-events-none"
             style={{ 
-              backgroundImage: `url(https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/690e2eb4183732016694349d_atomic-glow-dither-img-27.png)`,
+              backgroundImage: `url(https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/690e2eb4183732016694349d_atomic-glow-dither-img-27.png)`,
               backgroundSize: 'cover'
             }}
           />
@@ -104,7 +104,7 @@ const FooterCTA = () => {
           { title: 'Research', links: ['Turn Taking', 'Rendering', 'LLM Thinking', 'See all research'] },
           { title: 'Socials', links: ['LinkedIn', 'X'] },
           { title: 'Legal', links: ['ADA', 'Privacy policy', 'Terms of service', 'Website terms of service'] },
-          { title: 'Support', links: ['Discord', 'Email support@claymind.ai', 'PALs Help', 'Support center', 'Trust center'] },
+          { title: 'Support', links: ['Discord', 'Email support@clayrock.ai', 'PALs Help', 'Support center', 'Trust center'] },
         ].map((column, idx) => (
           <div key={idx} className={`p-6 border-black ${idx !== 6 ? 'md:border-r' : ''} border-b md:border-b-0`}>
             <div className="flex items-center gap-2 bg-black text-white px-2 py-1 mb-6 w-fit">

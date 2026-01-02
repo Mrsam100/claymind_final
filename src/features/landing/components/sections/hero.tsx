@@ -96,7 +96,7 @@ export default function HeroSection() {
       {/* Background Ripple Effect */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68ee0de82eeac37be67f824a_Hero-v2-1.avif"
+          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68ee0de82eeac37be67f824a_Hero-v2-1.avif"
           alt="Ripple Background"
           className="object-cover opacity-100"
         />
@@ -120,7 +120,7 @@ export default function HeroSection() {
           
           <div className="flex gap-4">
             <a 
-              href="https://platform.claymind.ai/auth/sign-up" 
+              href="https://platform.clayrock.ai/auth/sign-up" 
               className="brutal-btn flex items-center justify-center min-w-[200px]"
             >
               Start learning
@@ -195,7 +195,7 @@ export default function HeroSection() {
                       </div>
                   </div>
                   <img 
-                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68c8e57e6e512b9573db1a50_hero-cta-bg-2.webp"
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68c8e57e6e512b9573db1a50_hero-cta-bg-2.webp"
                     alt="CTA effect"
                     width={300}
                     height={100}

@@ -31,7 +31,7 @@ const Models = () => {
             <div className="bg-[#FF6B8B] p-10 flex flex-col border-r border-black">
               <div className="mb-8">
                 <img 
-                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/svgs/68f654e58239ee255621c07c_models-icon-6.svg"
+                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/svgs/68f654e58239ee255621c07c_models-icon-6.svg"
                   alt="Models icon"
                   width={64}
                   height={64}
@@ -50,7 +50,7 @@ const Models = () => {
             {/* Right Visual Area (Birds on Wire Art) */}
             <div className="relative min-h-[400px] flex items-center justify-center overflow-hidden bg-[#89CFF0]">
                <img 
-                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68fbd348e3cc27dfbff98c1e_models-birds-30.avif"
+                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68fbd348e3cc27dfbff98c1e_models-birds-30.avif"
                   alt="Birds on a wire"
                   className="object-cover"
                />

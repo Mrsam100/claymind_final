@@ -14,25 +14,25 @@ import React from 'react';
 
 const LOGO_ASSETS = [
   {
-    url: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/6913cbc2bedec7104679a887_Logo_of_Deloitte-3.png",
+    url: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/6913cbc2bedec7104679a887_Logo_of_Deloitte-3.png",
     alt: "Deloitte Logo",
     width: 140,
     height: 32
   },
   {
-    url: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/6913af263342f85385be96c4_Frame_202147229100-4.png",
+    url: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/6913af263342f85385be96c4_Frame_202147229100-4.png",
     alt: "Partner Logo",
     width: 100,
     height: 32
   },
   {
-    url: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/6913d9a161c6ca8ac828bb20_ChatGPT_20Image_20Nov_201-5.png",
+    url: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/6913d9a161c6ca8ac828bb20_ChatGPT_20Image_20Nov_201-5.png",
     alt: "ChatGPT Logo",
     width: 120,
     height: 32
   },
   {
-    url: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/6913d9caf5d4b8841ecc78ed_Amazon_logo-6.png",
+    url: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/6913d9caf5d4b8841ecc78ed_Amazon_logo-6.png",
     alt: "Amazon Logo",
     width: 100,
     height: 32

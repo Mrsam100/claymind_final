@@ -7,31 +7,31 @@ const features = [
     title: 'Interactive',
     subtitle: 'Learn by doing',
     description: 'Engage in hands-on projects and interactive lessons that make complex concepts simple.',
-    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68f263dbc8c3d7bd27813ce1_Multimodal-17.avif',
+    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68f263dbc8c3d7bd27813ce1_Multimodal-17.avif',
   },
   {
     title: 'Safe',
     subtitle: 'Kids-safe environment',
     description: 'Built with privacy and safety first. A curated space where kids can explore AI without risks.',
-    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68f263db00a81dd548874466_Proactive-18.avif',
+    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68f263db00a81dd548874466_Proactive-18.avif',
   },
   {
     title: 'Adaptive',
     subtitle: 'Grows with you',
     description: 'Our AI buddies adapt to each child\'s learning pace, providing personalized challenges and support.',
-    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68f263db7e09746fcd74e23d_Adaptive-19.avif',
+    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68f263db7e09746fcd74e23d_Adaptive-19.avif',
   },
   {
     title: 'Creative',
     subtitle: 'Build your own worlds',
     description: 'Empower kids to create games, art, and stories using AI as their ultimate creative partner.',
-    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68f263dbc32b375a880ead31_Agentic-20.png',
+    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68f263dbc32b375a880ead31_Agentic-20.png',
   },
   {
     title: 'Curious',
     subtitle: 'Ask anything',
     description: 'Foster curiosity with a tutor that never gets tired of "Why?". Explore science, history, and more.',
-    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68f263dbc32b375a880ead31_Agentic-20.png', 
+    icon: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68f263dbc32b375a880ead31_Agentic-20.png', 
   },
 ];
 

@@ -43,7 +43,7 @@ const ApiPlatform = () => {
             <div 
               className="absolute inset-0 z-0 opacity-100" 
               style={{
-                backgroundImage: `url('https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68ef6d459a69320363032ca0_api_20image-29.avif')`,
+                backgroundImage: `url('https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68ef6d459a69320363032ca0_api_20image-29.avif')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundColor: '#E4E2F4'
@@ -63,7 +63,7 @@ const ApiPlatform = () => {
                 </div>
                 <div className="p-4 font-mono text-[11px] leading-relaxed text-[#000000]">
                   <div className="text-blue-600">curl <span className="text-black">--request POST \</span></div>
-                  <div className="pl-4">--url https://claymindapi.com/v2/conversations \</div>
+                  <div className="pl-4">--url https://clayrockapi.com/v2/conversations \</div>
                   <div className="pl-4">--header <span className="text-green-600">'Content-Type: application/json'</span> \</div>
                   <div className="pl-4">--header <span className="text-green-600">'x-api-key: &lt;api-key&gt;'</span> \</div>
                   <div className="pl-4">--data '{'{'}</div>
@@ -100,7 +100,7 @@ const ApiPlatform = () => {
                    </div>
                 </div>
                 <div className="p-5 font-mono text-[11px] leading-6">
-                  <div className="text-[#39E17F]">claymind_features {'{'}</div>
+                  <div className="text-[#39E17F]">clayrock_features {'{'}</div>
                   <div className="pl-4">Languages: 30+</div>
                   <div className="pl-4">RAG: On,</div>
                   <div className="pl-4">Memory: On,</div>

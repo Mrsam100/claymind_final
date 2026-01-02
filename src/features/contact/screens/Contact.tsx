@@ -94,7 +94,7 @@ export function Contact() {
               'Just sign up, choose a module that interests you, and start with the first lesson!',
           },
           {
-            question: 'Is ClayMind really safe for kids?',
+            question: 'Is ClayRock really safe for kids?',
             answer:
               'Yes! We have content filters, parental controls, and all activities are monitored to ensure a safe learning environment.',
           },
@@ -404,7 +404,7 @@ export function Contact() {
               <Heart className="w-12 h-12 text-white mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-white mb-2">We Love Hearing From You!</h3>
               <p className="text-white/90">
-                Your feedback helps us make ClayMind better for everyone.
+                Your feedback helps us make ClayRock better for everyone.
               </p>
             </div>
           </Card3D>

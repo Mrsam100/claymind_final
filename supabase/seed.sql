@@ -1,4 +1,4 @@
--- ClayMind Seed Data
+-- ClayRock Seed Data
 -- Description: Test data for local development
 -- Date: 2025-01-01
 
@@ -115,7 +115,7 @@ INSERT INTO auth.users (
 (
     '00000000-0000-0000-0000-000000000001',
     '00000000-0000-0000-0000-000000000000',
-    'admin@claymind.com',
+    'admin@clayrock.com',
     '$2a$10$mZd2VEfPk.2yEL3.uGJPceaYDEHXYKKaF8wDHO7OZgF0qnZgaKBCu', -- 'password123'
     NOW(),
     NOW(),
@@ -133,7 +133,7 @@ INSERT INTO auth.users (
 (
     '00000000-0000-0000-0000-000000000002',
     '00000000-0000-0000-0000-000000000000',
-    'teacher@claymind.com',
+    'teacher@clayrock.com',
     '$2a$10$mZd2VEfPk.2yEL3.uGJPceaYDEHXYKKaF8wDHO7OZgF0qnZgaKBCu',
     NOW(),
     NOW(),
@@ -151,7 +151,7 @@ INSERT INTO auth.users (
 (
     '00000000-0000-0000-0000-000000000003',
     '00000000-0000-0000-0000-000000000000',
-    'parent@claymind.com',
+    'parent@clayrock.com',
     '$2a$10$mZd2VEfPk.2yEL3.uGJPceaYDEHXYKKaF8wDHO7OZgF0qnZgaKBCu',
     NOW(),
     NOW(),
@@ -231,9 +231,9 @@ INSERT INTO auth.identities (
     created_at,
     updated_at
 ) VALUES
-('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '{"sub":"00000000-0000-0000-0000-000000000001","email":"admin@claymind.com"}', 'email', NOW(), NOW(), NOW()),
-('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000002', '{"sub":"00000000-0000-0000-0000-000000000002","email":"teacher@claymind.com"}', 'email', NOW(), NOW(), NOW()),
-('00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000003', '{"sub":"00000000-0000-0000-0000-000000000003","email":"parent@claymind.com"}', 'email', NOW(), NOW(), NOW()),
+('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '{"sub":"00000000-0000-0000-0000-000000000001","email":"admin@clayrock.com"}', 'email', NOW(), NOW(), NOW()),
+('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000002', '{"sub":"00000000-0000-0000-0000-000000000002","email":"teacher@clayrock.com"}', 'email', NOW(), NOW(), NOW()),
+('00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000003', '{"sub":"00000000-0000-0000-0000-000000000003","email":"parent@clayrock.com"}', 'email', NOW(), NOW(), NOW()),
 ('00000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000004', '{"sub":"00000000-0000-0000-0000-000000000004","email":"alex@example.com"}', 'email', NOW(), NOW(), NOW()),
 ('00000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000005', '{"sub":"00000000-0000-0000-0000-000000000005","email":"emma@example.com"}', 'email', NOW(), NOW(), NOW()),
 ('00000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000006', '{"sub":"00000000-0000-0000-0000-000000000006","email":"noah@example.com"}', 'email', NOW(), NOW(), NOW());
@@ -251,7 +251,7 @@ INSERT INTO public.profiles (
     role, account_status, email_verified_at
 ) VALUES (
     '00000000-0000-0000-0000-000000000001',
-    'admin@claymind.com',
+    'admin@clayrock.com',
     'Admin',
     'User',
     'Admin User',
@@ -273,7 +273,7 @@ INSERT INTO public.profiles (
     role, account_status, email_verified_at
 ) VALUES (
     '00000000-0000-0000-0000-000000000002',
-    'teacher@claymind.com',
+    'teacher@clayrock.com',
     'Sarah',
     'Johnson',
     'Sarah Johnson',
@@ -295,7 +295,7 @@ INSERT INTO public.profiles (
     role, account_status, email_verified_at
 ) VALUES (
     '00000000-0000-0000-0000-000000000003',
-    'parent@claymind.com',
+    'parent@clayrock.com',
     'John',
     'Smith',
     'John Smith',

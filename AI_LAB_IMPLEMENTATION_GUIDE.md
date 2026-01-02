@@ -233,7 +233,7 @@ class AILabService {
   private addToHistory(item: GenerationHistoryItem): void {
     const history = this.getHistory();
     history.unshift(item);
-    localStorage.setItem('claymind_ai_lab_history', JSON.stringify(history.slice(0, 50)));
+    localStorage.setItem('clayrock_ai_lab_history', JSON.stringify(history.slice(0, 50)));
   }
 }
 ```

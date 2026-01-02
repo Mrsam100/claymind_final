@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
  * Features a large pixel-art style portrait and a descriptive text block.
  */
 export default function HumanComputingCompany() {
-  const missionImage = "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/6904ecb796a3a4e6677d57b1_0d6518f118014c5cbc6b19710-28.avif";
+  const missionImage = "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/6904ecb796a3a4e6677d57b1_0d6518f118014c5cbc6b19710-28.avif";
 
   return (
     <section className="bg-[#F1EEE9] py-[120px] overflow-hidden">

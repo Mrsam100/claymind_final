@@ -1,4 +1,4 @@
--- ClayMind Storage Buckets Configuration
+-- ClayRock Storage Buckets Configuration
 -- Description: Configure Supabase Storage for AI Lab creations, avatars, etc.
 -- Date: 2025-01-01
 

@@ -39,7 +39,7 @@ const HumanMachineDivide = () => {
       {/* Background Cloud Image Art */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-40">
         <img
-          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68f0e0628f97ea257bd5dd30_art-7.avif"
+          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68f0e0628f97ea257bd5dd30_art-7.avif"
           alt=""
           className="object-cover"
         />

@@ -43,7 +43,7 @@ const CtaFooterTease = () => {
           </h2>
 
           <a 
-            href="https://platform.claymind.ai/auth/sign-up"
+            href="https://platform.clayrock.ai/auth/sign-up"
             className="bg-[#FF6B8B] border-2 border-black text-[14px] font-bold uppercase tracking-widest px-8 py-3 shadow-[6px_6px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] transition-transform"
           >
             MEET YOUR BUDDIES

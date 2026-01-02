@@ -65,7 +65,7 @@ const MeetThePALs = () => {
               </div>
               <div className="relative aspect-video bg-[#222]">
                  <Image 
-                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68f0e3bb7519143839804c61_v2-9.avif"
+                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68f0e3bb7519143839804c61_v2-9.avif"
                   alt="Face-to-Face Video Interface"
                   fill
                   className="object-cover"
@@ -107,7 +107,7 @@ const MeetThePALs = () => {
                 <div className="flex items-center justify-center py-2">
                   <div className="w-16 h-16 rounded-full overflow-hidden border border-black relative">
                      <Image 
-                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/690c959a23ddc18ac3385d88_voice-15.avif"
+                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/690c959a23ddc18ac3385d88_voice-15.avif"
                       alt="Voice interaction avatar"
                       fill
                       className="object-cover grayscale"

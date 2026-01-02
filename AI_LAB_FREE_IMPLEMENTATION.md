@@ -39,7 +39,7 @@
 ### Install Gemini SDK:
 
 ```bash
-cd claymind
+cd clayrock
 npm install @google/generative-ai
 ```
 
@@ -171,16 +171,16 @@ Break it down line by line and explain what each part does. Use simple language 
   private addToHistory(item: any): void {
     const history = this.getHistory();
     history.unshift(item);
-    localStorage.setItem('claymind_ai_lab_history', JSON.stringify(history.slice(0, 50)));
+    localStorage.setItem('clayrock_ai_lab_history', JSON.stringify(history.slice(0, 50)));
   }
 
   getHistory(): any[] {
-    const stored = localStorage.getItem('claymind_ai_lab_history');
+    const stored = localStorage.getItem('clayrock_ai_lab_history');
     return stored ? JSON.parse(stored) : [];
   }
 
   clearHistory(): void {
-    localStorage.removeItem('claymind_ai_lab_history');
+    localStorage.removeItem('clayrock_ai_lab_history');
   }
 }
 
@@ -526,7 +526,7 @@ vercel
 # Follow prompts, done!
 ```
 
-Your app will be live at: `https://claymind.vercel.app`
+Your app will be live at: `https://clayrock.vercel.app`
 
 ---
 

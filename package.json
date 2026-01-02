@@ -1,5 +1,5 @@
 {
-  "name": "@figma/my-make-file",
+  "name": "clayrock",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -49,6 +49,7 @@
     "cmdk": "1.1.1",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "8.6.0",
+    "framer-motion": "^12.23.24",
     "input-otp": "1.4.2",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.552.0",
@@ -58,7 +59,6 @@
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1",
     "react-hook-form": "^7.60.0",
-    "react-popper": "2.3.0",
     "react-resizable-panels": "^3.0.3",
     "react-responsive-masonry": "2.7.1",
     "react-router-dom": "^7.11.0",
@@ -66,20 +66,19 @@
     "recharts": "^3.0.2",
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1",
-    "tw-animate-css": "1.3.8",
-    "vaul": "1.1.2",
-    "zod": "^4.1.12",
-    "framer-motion": "^12.23.24"
-  },
-  "devDependencies": {
     "@tailwindcss/vite": "^4.1.12",
     "@vitejs/plugin-react": "^4.7.0",
     "tailwindcss": "^4",
-    "vite": "^6.3.5"
+    "tw-animate-css": "1.3.8",
+    "vaul": "1.1.2",
+    "vite": "^6.4.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
   },
   "peerDependencies": {
-    "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "peerDependenciesMeta": {
     "react": {

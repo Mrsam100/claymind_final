@@ -28,7 +28,7 @@ enable_confirmations = true
 
 1. **Start Supabase:**
    ```bash
-   cd claymind
+   cd clayrock
    supabase start
    ```
 
@@ -68,8 +68,8 @@ host = "smtp.sendgrid.net"
 port = 587
 user = "apikey"
 pass = "env(SENDGRID_API_KEY)"
-admin_email = "noreply@claymind.com"
-sender_name = "ClayMind"
+admin_email = "noreply@clayrock.com"
+sender_name = "ClayRock"
 ```
 
 **3. Set environment variable:**
@@ -81,7 +81,7 @@ SENDGRID_API_KEY=your_sendgrid_api_key_here
 
 **4. Verify sender email:**
 - In SendGrid dashboard, verify your sender email
-- Use a domain email (e.g., noreply@claymind.com)
+- Use a domain email (e.g., noreply@clayrock.com)
 
 ### Option 2: Gmail SMTP
 
@@ -100,7 +100,7 @@ port = 587
 user = "your-email@gmail.com"
 pass = "env(GMAIL_APP_PASSWORD)"
 admin_email = "your-email@gmail.com"
-sender_name = "ClayMind"
+sender_name = "ClayRock"
 ```
 
 **3. Set environment variable:**
@@ -123,8 +123,8 @@ host = "email-smtp.us-east-1.amazonaws.com"
 port = 587
 user = "env(AWS_SES_USERNAME)"
 pass = "env(AWS_SES_PASSWORD)"
-admin_email = "noreply@claymind.com"
-sender_name = "ClayMind"
+admin_email = "noreply@clayrock.com"
+sender_name = "ClayRock"
 ```
 
 ### Option 4: Supabase Cloud (Easiest)
@@ -141,7 +141,7 @@ If hosting on Supabase Cloud, email delivery is **automatic**:
 
 ### Customize Verification Email
 
-Create: `claymind/supabase/templates/confirmation.html`
+Create: `clayrock/supabase/templates/confirmation.html`
 
 ```html
 <!DOCTYPE html>
@@ -163,11 +163,11 @@ Create: `claymind/supabase/templates/confirmation.html`
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to ClayMind! 🎨</h1>
+    <h1>Welcome to ClayRock! 🎨</h1>
 
     <p>Hi there!</p>
 
-    <p>Thanks for joining ClayMind! Before you start your AI learning adventure,
+    <p>Thanks for joining ClayRock! Before you start your AI learning adventure,
     we need to verify your email address.</p>
 
     <p>Click the button below to confirm your email:</p>
@@ -183,7 +183,7 @@ Create: `claymind/supabase/templates/confirmation.html`
 
     <div class="footer">
       <p>If you didn't create an account, you can safely ignore this email.</p>
-      <p>Happy learning!<br>The ClayMind Team</p>
+      <p>Happy learning!<br>The ClayRock Team</p>
     </div>
   </div>
 </body>
@@ -196,7 +196,7 @@ Update `config.toml`:
 
 ```toml
 [auth.email.template.confirmation]
-subject = "Verify your email for ClayMind"
+subject = "Verify your email for ClayRock"
 content_path = "./supabase/templates/confirmation.html"
 ```
 
@@ -216,7 +216,7 @@ echo ""
 
 # Check if Supabase is running
 echo "1. Checking Supabase status..."
-cd claymind
+cd clayrock
 supabase status
 
 echo ""
@@ -250,7 +250,7 @@ echo "✅ If email appears in Inbucket, delivery is working!"
 **Solution:**
 ```bash
 # Restart Supabase
-cd claymind
+cd clayrock
 supabase db reset
 
 # Check Inbucket is running
@@ -269,7 +269,7 @@ curl http://127.0.0.1:54324
 
 3. Set up DMARC:
    ```
-   TXT _dmarc "v=DMARC1; p=none; rua=mailto:admin@claymind.com"
+   TXT _dmarc "v=DMARC1; p=none; rua=mailto:admin@clayrock.com"
    ```
 
 ### Problem: SMTP authentication failed
@@ -314,7 +314,7 @@ Track in your analytics:
 ## 🎯 Best Practices
 
 ### 1. **Use a dedicated email domain**
-   - noreply@claymind.com
+   - noreply@clayrock.com
    - Not personal Gmail
 
 ### 2. **Set up email authentication**
@@ -358,7 +358,7 @@ Track in your analytics:
 **For Local Dev (Now):**
 ```bash
 # 1. Start Supabase
-cd claymind
+cd clayrock
 supabase start
 
 # 2. Check Inbucket is running

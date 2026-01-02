@@ -1,4 +1,4 @@
--- ClayMind Progress & Gamification Schema
+-- ClayRock Progress & Gamification Schema
 -- Description: User progress, XP, levels, badges, and achievements
 -- Date: 2025-01-01
 

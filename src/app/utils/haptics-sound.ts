@@ -462,7 +462,7 @@ export const unlockFeedback = () => {
 
 // ==================== PREFERENCES ====================
 
-const STORAGE_KEY = "claymind_audio_preferences";
+const STORAGE_KEY = "clayrock_audio_preferences";
 
 interface AudioPreferences {
   soundEnabled: boolean;

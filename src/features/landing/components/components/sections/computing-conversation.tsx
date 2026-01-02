@@ -48,8 +48,8 @@ export default function ComputingConversation() {
   };
 
   const assets = {
-    vintageComputer: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/6902d0dbe2f650b0981e8f9f_computer_no_icon_402x-23.avif",
-    computerIcon: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/svgs/6902d0daa44b4b8de3c09272_computer_icon_claymind-3.svg",
+    vintageComputer: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/6902d0dbe2f650b0981e8f9f_computer_no_icon_402x-23.avif",
+    computerIcon: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/svgs/6902d0daa44b4b8de3c09272_computer_icon_clayrock-3.svg",
     eyeIcon: "https://cdn.prod.website-files.com/68c8e57d6e512b9573db146f/68e21a8d9a4f66d4990c0071_multimodal-icon.png",
     lipsIcon: "https://cdn.prod.website-files.com/68c8e57d6e512b9573db146f/68e21a8d9a4f66d4990c0072_perceptive-icon.png",
     codeIcon: "https://cdn.prod.website-files.com/68c8e57d6e512b9573db146f/68e21a8d9a4f66d4990c0073_agentic-icon.png"

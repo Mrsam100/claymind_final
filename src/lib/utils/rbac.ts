@@ -1,6 +1,6 @@
 /**
  * Role-Based Access Control (RBAC) Utilities
- * Centralized role checking for ClayMind
+ * Centralized role checking for ClayRock
  */
 
 import type { User } from '../types/api';

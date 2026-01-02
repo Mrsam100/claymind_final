@@ -80,7 +80,7 @@ export function Landing({ onGetStarted, onParentView }: LandingProps) {
               </h1>
 
               <p className="text-lg text-[var(--color-slate-600)] leading-relaxed">
-                🎨 Welcome to ClayMind! Your super-fun playground where you'll learn to create amazing AI projects just like magic! No boring stuff, just hands-on fun! 🚀
+                🎨 Welcome to ClayRock! Your super-fun playground where you'll learn to create amazing AI projects just like magic! No boring stuff, just hands-on fun! 🚀
               </p>
 
               <div className="flex flex-wrap gap-4">

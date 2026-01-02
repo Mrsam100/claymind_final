@@ -152,7 +152,7 @@ export function Signup() {
         <Card3D variant="default" hover={false}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Join ClayMind</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Join ClayRock</h2>
               <p className="text-gray-600">Start your AI learning adventure</p>
             </div>
 

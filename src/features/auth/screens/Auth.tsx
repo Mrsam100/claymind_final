@@ -32,7 +32,7 @@ export function Auth({ onLogin }: AuthProps) {
           <div className="space-y-6">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                {isSignup ? "Join ClayMind" : "Welcome Back"}
+                {isSignup ? "Join ClayRock" : "Welcome Back"}
               </h2>
               <p className="text-gray-600">
                 {isSignup ? "Start your AI learning adventure" : "Continue your learning journey"}

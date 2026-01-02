@@ -19,7 +19,7 @@ const PALS_DATA: PalProfile[] = [
     id: 'noah',
     name: 'Noah',
     tagline: 'The boy next door',
-    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68ef663e2c4beee5e96d1677_h1-24.avif',
+    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68ef663e2c4beee5e96d1677_h1-24.avif',
     description: "Hey, what’s up? I’m Noah, I always keep it real with you, which means I'll tell you getting back with your ex is a terrible idea. Then I'll be there when you do it anyway.",
     sections: [
       {
@@ -36,7 +36,7 @@ const PALS_DATA: PalProfile[] = [
     id: 'dominic',
     name: 'Dominic',
     tagline: 'Your old school butler',
-    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68ef663e3400ada21bae4716_h2-25.avif',
+    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68ef663e3400ada21bae4716_h2-25.avif',
     description: "I exist in the shadows, quietly making sure everything goes to plan. If Sir or Madam requires anything at all, I am here to be summoned, no task too big or small. Let’s sort out the chaos, shall we?",
     sections: [
       {
@@ -54,7 +54,7 @@ const PALS_DATA: PalProfile[] = [
     id: 'ashley',
     name: 'Ashley',
     tagline: 'The gossip girl',
-    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68ef663eb1e0c6c792fa46da_h3-26.avif',
+    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68ef663eb1e0c6c792fa46da_h3-26.avif',
     description: "Hey hey! It’s Ashley, I’m pretty much always online. Turns out I have a huge fear of missing out, and I love, love, love to spill the tea. At least it means I’m never boring or short on things to talk about",
     sections: [
       {
@@ -71,7 +71,7 @@ const PALS_DATA: PalProfile[] = [
     id: 'charlie',
     name: 'Charlie',
     tagline: 'The boy genius',
-    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/69117d969472df511404afee_raza-22.avif',
+    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/69117d969472df511404afee_raza-22.avif',
     description: "If I had to describe myself in 3 words, I would say I’m hilarious, a bit nerdy, and constantly curious. I mean I’m REALLY into computers",
     sections: [
       {
@@ -150,7 +150,7 @@ export default function PalProfiles() {
             
             <div className="mt-auto p-4 border-t border-black bg-[#E5E1DA]">
                 <div className="text-[10px] font-mono-ui font-bold truncate">Hassaan Raza</div>
-                <div className="text-[10px] font-mono text-[#666666] truncate">hassaan@claymind.ai</div>
+                <div className="text-[10px] font-mono text-[#666666] truncate">hassaan@clayrock.ai</div>
             </div>
           </div>
 

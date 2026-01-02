@@ -76,7 +76,7 @@ export default function Navbar() {
         <div className="flex items-center space-x-4">
           <div className="relative group hidden sm:block">
             <a 
-              href="https://platform.claymind.ai/auth/sign-in" 
+              href="https://platform.clayrock.ai/auth/sign-in" 
               className="font-sans font-semibold text-[14px] uppercase tracking-wide px-4 py-2 border-2 border-transparent hover:border-black transition-all"
             >
               Login
@@ -84,7 +84,7 @@ export default function Navbar() {
           </div>
           
           <a
-            href="https://platform.claymind.ai/auth/sign-up?plan=free"
+            href="https://platform.clayrock.ai/auth/sign-up?plan=free"
             className="bg-[#FF6B8B] border-2 border-black px-6 py-2 shadow-[6px_6px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[4px_4px_0px_#000000] transition-all"
           >
             <span className="font-sans font-bold text-[14px] uppercase tracking-wider text-black">

@@ -1,6 +1,6 @@
 /**
  * Supabase Database Types
- * Auto-generated types for ClayMind database schema
+ * Auto-generated types for ClayRock database schema
  */
 
 export type Json =

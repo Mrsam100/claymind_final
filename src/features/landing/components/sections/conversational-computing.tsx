@@ -29,7 +29,7 @@ const ConversationalComputing = () => {
               <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#FF9C37] opacity-40 blur-[80px]" />
               
               <img
-                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/6902d0dbe2f650b0981e8f9f_computer_no_icon_402x-23.avif"
+                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/6902d0dbe2f650b0981e8f9f_computer_no_icon_402x-23.avif"
                 alt="Vintage Computer"
                 width={402}
                 height={400}
@@ -38,7 +38,7 @@ const ConversationalComputing = () => {
               {/* Logo Overlay on Screen */}
               <div className="absolute left-[36%] top-[18%] z-20 w-[24%] translate-x-1/2 opacity-90 grayscale brightness-125">
                 <img 
-                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/svgs/6902d0daa44b4b8de3c09272_computer_icon_tavus-3.svg"
+                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/svgs/6902d0daa44b4b8de3c09272_computer_icon_tavus-3.svg"
                   alt="ClaymindAI Logo"
                   width={60}
                   height={60}
@@ -65,7 +65,7 @@ const ConversationalComputing = () => {
               Your new intern. Or friend. Or both. Perceptive and proactive across text, voice, email, and more.
             </p>
             <a 
-              href="https://platform.claymind.ai/auth/sign-up" 
+              href="https://platform.clayrock.ai/auth/sign-up" 
               className="inline-block border border-black bg-white px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-[#1A1A1A] shadow-[2px_2px_0px_#000] hover:bg-[#F7F4EF] active:shadow-none transition-all"
             >
               JOIN THE QUEUE
@@ -109,7 +109,7 @@ const ConversationalComputing = () => {
               Embed white-labeled, real-time, face-to-face AI into your app with one seamless API.
             </p>
             <a 
-              href="https://docs.claymind.ai" 
+              href="https://docs.clayrock.ai" 
               className="inline-block border border-black bg-white px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-[#1A1A1A] shadow-[2px_2px_0px_#000] hover:bg-[#F7F4EF] active:shadow-none transition-all"
             >
               SEE DOCS

@@ -1,6 +1,6 @@
-## ClayMind Supabase Database Schema
+## ClayRock Supabase Database Schema
 
-Complete production-ready PostgreSQL schema for ClayMind, an AI literacy platform for kids.
+Complete production-ready PostgreSQL schema for ClayRock, an AI literacy platform for kids.
 
 ### 📁 Folder Structure
 
@@ -72,7 +72,7 @@ supabase/
 npm install -g supabase
 
 # Initialize Supabase in your project
-cd claymind
+cd clayrock
 supabase init
 
 # Start local Supabase
@@ -252,9 +252,9 @@ LIMIT 10;
 
 | Email | Password | Role | Notes |
 |-------|----------|------|-------|
-| `admin@claymind.com` | - | Admin | Full access |
-| `teacher@claymind.com` | - | Teacher | Manages AI Explorers class |
-| `parent@claymind.com` | - | Parent | Parent of Alex & Emma |
+| `admin@clayrock.com` | - | Admin | Full access |
+| `teacher@clayrock.com` | - | Teacher | Manages AI Explorers class |
+| `parent@clayrock.com` | - | Parent | Parent of Alex & Emma |
 | `alex@example.com` | - | Student | Active learner, Level 3 |
 | `emma@example.com` | - | Student | Beginner, Level 2 |
 | `noah@example.com` | - | Student | Advanced, Level 5 |
@@ -350,5 +350,5 @@ supabase start
 
 ---
 
-**Built for ClayMind** 🎨🤖
+**Built for ClayRock** 🎨🤖
 Production-ready, child-safe AI learning platform

@@ -1,4 +1,4 @@
-# Supabase Setup Guide for ClayMind
+# Supabase Setup Guide for ClayRock
 
 Complete step-by-step guide to set up Supabase for local development and production.
 
@@ -29,7 +29,7 @@ supabase --version
 ### Step 2: Initialize Supabase in Project
 
 ```bash
-cd claymind
+cd clayrock
 supabase init
 ```
 
@@ -95,9 +95,9 @@ You should see:
 | `alex@example.com` | Student | (set in Auth panel) |
 | `emma@example.com` | Student | (set in Auth panel) |
 | `noah@example.com` | Student | (set in Auth panel) |
-| `parent@claymind.com` | Parent | (set in Auth panel) |
-| `teacher@claymind.com` | Teacher | (set in Auth panel) |
-| `admin@claymind.com` | Admin | (set in Auth panel) |
+| `parent@clayrock.com` | Parent | (set in Auth panel) |
+| `teacher@clayrock.com` | Teacher | (set in Auth panel) |
+| `admin@clayrock.com` | Admin | (set in Auth panel) |
 
 ### Step 6: Configure Environment Variables
 
@@ -150,7 +150,7 @@ Should output 5 published modules.
 1. Go to https://supabase.com
 2. Click **New Project**
 3. Choose organization
-4. Set project name: `claymind-prod`
+4. Set project name: `clayrock-prod`
 5. Set strong database password
 6. Choose region (closest to users)
 7. Click **Create Project**
@@ -524,4 +524,4 @@ supabase start
 
 **Setup Complete!** 🎉
 
-Your ClayMind database is now ready for development and production use.
+Your ClayRock database is now ready for development and production use.

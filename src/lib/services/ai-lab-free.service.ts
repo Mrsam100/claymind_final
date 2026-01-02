@@ -29,7 +29,7 @@ export interface GenerateOptions {
 
 class AILabFreeService {
   private model = genAI?.getGenerativeModel({ model: 'gemini-pro' });
-  private historyKey = 'claymind_ai_lab_history';
+  private historyKey = 'clayrock_ai_lab_history';
   private maxHistoryItems = 50;
 
   /**
@@ -155,7 +155,7 @@ Be the coolest, most helpful AI teacher ever! 🌟`;
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClayMind Creation</title>
+  <title>ClayRock Creation</title>
 </head>
 <body>
 ${code}

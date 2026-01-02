@@ -23,7 +23,7 @@ export interface TutorialContent {
 export const TUTORIAL_CONTENT: Record<UserRole, TutorialContent> = {
   student: {
     title: "Your AI Learning Adventure Awaits!",
-    subtitle: "Discover everything you can do on ClayMind",
+    subtitle: "Discover everything you can do on ClayRock",
     features: [
       {
         icon: Brain,

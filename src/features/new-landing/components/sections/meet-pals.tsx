@@ -17,7 +17,7 @@ const MeetPals: React.FC = () => {
       {/* Background Radial Dither Effect (Simulated via image from assets) */}
       <div className="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none">
         <img 
-          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/6904e869318bdad26e1f1167_meet-radial-16.avif" 
+          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/6904e869318bdad26e1f1167_meet-radial-16.avif" 
           alt="" 
           className="w-full h-full object-cover"
         />
@@ -57,7 +57,7 @@ const MeetPals: React.FC = () => {
             </div>
             <div className="p-1 bg-black aspect-video relative overflow-hidden pointer-events-none">
                <img 
-                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/68ee11332e6ba397448a7c58_v2-img-14.avif"
+                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/68ee11332e6ba397448a7c58_v2-img-14.avif"
                 alt="PAL Video"
                 className="w-full h-full object-cover grayscale-[20%]"
               />
@@ -121,7 +121,7 @@ const MeetPals: React.FC = () => {
                 </div>
                 <div className="flex justify-center items-center py-2 h-24 overflow-hidden pointer-events-none">
                     <img 
-                        src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-claymind.ai/assets/images/690c959a23ddc18ac3385d88_voice-15.avif" 
+                        src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/caf4db2a-9a39-49f0-8414-6a2e71f7c407-clayrock.ai/assets/images/690c959a23ddc18ac3385d88_voice-15.avif" 
                         alt="Voice Waveform"
                         className="w-full h-auto object-contain"
                     />

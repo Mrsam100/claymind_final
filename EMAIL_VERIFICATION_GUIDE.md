@@ -2,7 +2,7 @@
 
 ## Overview
 
-Email verification is **mandatory** for ClayMind before accepting real users, especially since this is a kids platform. This guide walks you through enabling and configuring email verification in Supabase.
+Email verification is **mandatory** for ClayRock before accepting real users, especially since this is a kids platform. This guide walks you through enabling and configuring email verification in Supabase.
 
 ## Why Email Verification is Critical
 
@@ -24,7 +24,7 @@ Email verification is **mandatory** for ClayMind before accepting real users, es
 
 1. Start Supabase:
    ```bash
-   cd claymind
+   cd clayrock
    supabase start
    ```
 
@@ -65,11 +65,11 @@ supabase db reset
 ### Customize for Kids Platform
 
 ```html
-<h2>Welcome to ClayMind! 🎨</h2>
+<h2>Welcome to ClayRock! 🎨</h2>
 
 <p>Hi {{ .Name }},</p>
 
-<p>Thanks for joining ClayMind! Before you start your AI learning adventure,
+<p>Thanks for joining ClayRock! Before you start your AI learning adventure,
 we need to verify your email address.</p>
 
 <p>Click the button below to confirm your email:</p>
@@ -85,7 +85,7 @@ we need to verify your email address.</p>
 
 <p>This link will expire in 24 hours.</p>
 
-<p>Happy learning!<br>The ClayMind Team</p>
+<p>Happy learning!<br>The ClayRock Team</p>
 ```
 
 ### Parent Email Template
@@ -97,7 +97,7 @@ For students under 13, you'll need parent consent. Create a custom email:
 
 <p>Hello,</p>
 
-<p>Your child {{ .ChildName }} has created an account on ClayMind.
+<p>Your child {{ .ChildName }} has created an account on ClayRock.
 As a platform for young learners, we require parental consent.</p>
 
 <p>Click below to verify and activate your child's account:</p>
@@ -391,8 +391,8 @@ Solution: Use the resend button on `/verify-email` page
 - [Supabase Email Auth Docs](https://supabase.com/docs/guides/auth/auth-email)
 - [Email Templates Guide](https://supabase.com/docs/guides/auth/auth-email-templates)
 - [React Router Protected Routes](https://reactrouter.com/en/main/start/overview)
-- [ClayMind RBAC Guide](src/lib/utils/rbac.ts)
+- [ClayRock RBAC Guide](src/lib/utils/rbac.ts)
 
 ---
 
-**Important**: Email verification is mandatory before production deployment for ClayMind. This is non-negotiable for a kids platform.
+**Important**: Email verification is mandatory before production deployment for ClayRock. This is non-negotiable for a kids platform.

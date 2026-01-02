@@ -1,6 +1,6 @@
--- ClayMind Initial Schema Migration
+-- ClayRock Initial Schema Migration
 -- Description: Core tables for users, profiles, roles, and relationships
--- Author: ClayMind Team
+-- Author: ClayRock Team
 -- Date: 2025-01-01
 
 -- Enable UUID extension

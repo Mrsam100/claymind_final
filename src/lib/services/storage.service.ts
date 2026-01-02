@@ -7,13 +7,13 @@ import type { User, UserProgress } from '../types/api';
 
 // Storage keys
 const STORAGE_KEYS = {
-  USER: 'claymind_user',
-  PROGRESS: 'claymind_progress',
-  MODULE_PROGRESS: 'claymind_module_progress',
-  LESSON_PROGRESS: 'claymind_lesson_progress',
-  BADGES: 'claymind_badges',
-  ACHIEVEMENTS: 'claymind_achievements',
-  SETTINGS: 'claymind_settings',
+  USER: 'clayrock_user',
+  PROGRESS: 'clayrock_progress',
+  MODULE_PROGRESS: 'clayrock_module_progress',
+  LESSON_PROGRESS: 'clayrock_lesson_progress',
+  BADGES: 'clayrock_badges',
+  ACHIEVEMENTS: 'clayrock_achievements',
+  SETTINGS: 'clayrock_settings',
 } as const;
 
 export interface ModuleProgress {

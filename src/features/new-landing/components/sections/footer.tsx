@@ -52,9 +52,9 @@ const footerLinks: FooterSection[] = [
   {
     category: 'SOCIALS',
     links: [
-      { label: 'LinkedIn', href: 'https://linkedin.com/company/claymind', external: true },
-      { label: 'X', href: 'https://x.com/claymind', external: true },
-      { label: 'Instagram', href: 'https://instagram.com/claymind', external: true },
+      { label: 'LinkedIn', href: 'https://linkedin.com/company/clayrock', external: true },
+      { label: 'X', href: 'https://x.com/clayrock', external: true },
+      { label: 'Instagram', href: 'https://instagram.com/clayrock', external: true },
     ],
   },
   {
@@ -70,7 +70,7 @@ const footerLinks: FooterSection[] = [
     links: [
       { label: 'Discord', href: '/discord' },
       { label: 'Help Center', href: '/help' },
-      { label: 'Contact Us', href: 'mailto:hello@claymind.ai', external: true },
+      { label: 'Contact Us', href: 'mailto:hello@clayrock.ai', external: true },
     ],
   },
 ];

@@ -14,8 +14,8 @@ export const config = {
     isProd: import.meta.env.PROD,
   },
   auth: {
-    tokenKey: 'claymind_access_token',
-    refreshTokenKey: 'claymind_refresh_token',
+    tokenKey: 'clayrock_access_token',
+    refreshTokenKey: 'clayrock_refresh_token',
   },
 } as const;
 

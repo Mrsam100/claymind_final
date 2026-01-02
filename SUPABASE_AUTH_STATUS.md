@@ -81,9 +81,9 @@ All have password: `password123`
 | `alex@example.com` | Student | 3 | Active learner |
 | `emma@example.com` | Student | 2 | Beginner |
 | `noah@example.com` | Student | 5 | Advanced |
-| `admin@claymind.com` | Admin | 1 | Full access |
-| `teacher@claymind.com` | Teacher | 1 | Class: AI Explorers |
-| `parent@claymind.com` | Parent | 1 | Parent of Alex & Emma |
+| `admin@clayrock.com` | Admin | 1 | Full access |
+| `teacher@clayrock.com` | Teacher | 1 | Class: AI Explorers |
+| `parent@clayrock.com` | Parent | 1 | Parent of Alex & Emma |
 
 ### Simple Test Script
 
