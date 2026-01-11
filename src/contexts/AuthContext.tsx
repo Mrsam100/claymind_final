@@ -18,6 +18,7 @@ export interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  testLogin: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,6 +37,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const checkAuth = useCallback(async () => {
     try {
       setLoading(true);
+
+      // First check for test user in localStorage (development only)
+      if (import.meta.env.DEV) {
+        const testUserData = localStorage.getItem('clayrock_test_user');
+        if (testUserData) {
+          const testUser = JSON.parse(testUserData) as User;
+          setUser(testUser);
+          errorLoggingService.setUser({ id: testUser.id, email: testUser.email });
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Otherwise, check with auth service
       const currentUser = await authService.getCurrentUser();
       setUser(currentUser);
       if (currentUser) {
@@ -120,6 +135,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = useCallback(async () => {
     try {
       setLoading(true);
+
+      // Clear test user if present
+      localStorage.removeItem('clayrock_test_user');
+
       await authService.logout();
       setUser(null);
       errorLoggingService.clearUser();
@@ -127,6 +146,56 @@ export function AuthProvider({ children }: AuthProviderProps) {
       errorLoggingService.logAuthError(error instanceof Error ? error : new Error(String(error)), 'logout');
       setUser(null);
       errorLoggingService.clearUser();
+      // Make sure to clear test user even on error
+      localStorage.removeItem('clayrock_test_user');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  /**
+   * Test Login (Development Only)
+   * Creates a mock user without Supabase authentication
+   */
+  const testLogin = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      // Create mock user object with all required fields
+      const now = new Date().toISOString();
+      const mockUser: User = {
+        id: 'test-user-' + Date.now(),
+        email: 'test@clayrock.com',
+        firstName: 'Test',
+        lastName: 'User',
+        displayName: 'Test User',
+        username: 'testuser',
+        role: 'student',
+        level: 1,
+        age: 10,
+        avatarUrl: undefined,
+        accountStatus: 'active',
+        emailVerifiedAt: now,
+        onboardingCompletedAt: now,
+        joinedDate: now,
+        bio: 'Test user for development',
+      };
+
+      // Store in localStorage for persistence
+      localStorage.setItem('clayrock_test_user', JSON.stringify(mockUser));
+
+      setUser(mockUser);
+      errorLoggingService.setUser({ id: mockUser.id, email: mockUser.email });
+
+      errorLoggingService.addBreadcrumb({
+        category: 'auth',
+        message: 'Test login successful',
+        level: 'info',
+        data: { userId: mockUser.id },
+      });
+    } catch (error) {
+      errorLoggingService.logAuthError(error instanceof Error ? error : new Error(String(error)), 'testLogin');
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -165,6 +234,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     signInWithGoogle,
     logout,
     checkAuth,
+    testLogin,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

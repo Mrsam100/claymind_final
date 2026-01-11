@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion } from 'motion/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, Lock, AlertCircle, Loader2, Zap } from 'lucide-react';
 import { Button3D } from '../../../app/components/3d-button';
 import { Card3D } from '../../../app/components/3d-card';
 import { FloatingMascot } from '../../../app/components/floating-mascot';
@@ -32,7 +32,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export function Login() {
   const navigate = useNavigate();
-  const { login, isLoading: authLoading } = useAuth();
+  const { login, testLogin, isLoading: authLoading } = useAuth();
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
@@ -48,6 +48,10 @@ export function Login() {
   });
 
   const isLoading = authLoading || isSubmitting;
+
+  // Show test login in development mode
+  const isDevelopment = import.meta.env.DEV;
+  const showTestLogin = isDevelopment;
 
   const onSubmit = async (data: LoginFormData) => {
     try {
@@ -68,6 +72,23 @@ export function Login() {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Login failed. Please try again.';
+      setSubmitError(errorMessage);
+    }
+  };
+
+  // Test login handler - bypasses authentication completely
+  const handleTestLogin = async () => {
+    try {
+      setSubmitError(null);
+
+      // Use test login (creates mock user, no Supabase needed)
+      await testLogin();
+
+      // Redirect to dashboard on success
+      navigate('/kid-dashboard');
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Test login failed. Please try again.';
       setSubmitError(errorMessage);
     }
   };
@@ -180,6 +201,32 @@ export function Login() {
                 'Sign In'
               )}
             </Button3D>
+
+            {/* Test Login Button (Development Only) */}
+            {showTestLogin && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Button3D
+                  type="button"
+                  variant="secondary"
+                  size="lg"
+                  onClick={handleTestLogin}
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Zap className="w-5 h-5" />
+                    Quick Test Login (Dev Only)
+                  </span>
+                </Button3D>
+                <p className="text-xs text-center text-gray-500 mt-2">
+                  Auto-login with test credentials for development
+                </p>
+              </motion.div>
+            )}
 
             {/* Sign up link */}
             <div className="text-center">

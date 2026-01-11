@@ -19,11 +19,11 @@ export function ProtectedRoute({
   requireEmailVerified = false,
   requireOnboarding = true
 }: ProtectedRouteProps) {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
   // Show loader while checking authentication
-  if (isLoading) {
+  if (loading) {
     return <Loader fullScreen message="Loading..." />;
   }
 
