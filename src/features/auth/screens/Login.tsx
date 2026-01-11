@@ -49,9 +49,10 @@ export function Login() {
 
   const isLoading = authLoading || isSubmitting;
 
-  // Show test login in development mode
+  // Show test login in development mode OR if explicitly enabled
   const isDevelopment = import.meta.env.DEV;
-  const showTestLogin = isDevelopment;
+  const testLoginEnabled = import.meta.env.VITE_ENABLE_TEST_LOGIN === 'true';
+  const showTestLogin = isDevelopment || testLoginEnabled;
 
   const onSubmit = async (data: LoginFormData) => {
     try {
