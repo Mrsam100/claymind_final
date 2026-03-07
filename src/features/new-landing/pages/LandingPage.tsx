@@ -1,21 +1,33 @@
 import { useEffect } from "react";
-import "../styles/landing.css";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
+import { getDefaultRouteForRole } from "../../../lib/utils/rbac";
 import Navbar from "../components/sections/navbar";
 import HeroSection from "../components/sections/hero";
-import LogoMarquee from "../components/sections/logo-marquee";
-import HumanMachineDivide from "../components/sections/human-machine-divide";
-import MeetPals from "../components/sections/meet-pals";
 import FeaturesGrid from "../components/sections/features-grid";
-import PalsProfiles from "../components/sections/pals-profiles";
-import HumanComputingCompany from "../components/sections/human-computing-company";
-import CtaFooterTease from "../components/sections/cta-footer-tease";
+import Problem from "../components/sections/problem";
+import Solution from "../components/sections/solution";
+import Modules from "../components/sections/modules";
+import AgeGroup from "../components/sections/age-group";
+import CTA from "../components/sections/cta";
 import Footer from "../components/sections/footer";
 
 export default function LandingPage() {
-  // Load Google Fonts for landing page
+  const navigate = useNavigate();
+  const { user, isAuthenticated, loading } = useAuth();
+
+  // Redirect authenticated users to their dashboard
+  useEffect(() => {
+    if (!loading && isAuthenticated && user) {
+      const dashboardPath = getDefaultRouteForRole(user);
+      navigate(dashboardPath, { replace: true });
+    }
+  }, [loading, isAuthenticated, user, navigate]);
+
+  // Load Fredoka font for the landing page
   useEffect(() => {
     const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap';
+    link.href = 'https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
@@ -25,17 +37,16 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="landing-page flex flex-col min-h-screen">
+    <div className="min-h-screen bg-white" style={{ fontFamily: "'Fredoka', sans-serif" }}>
       <Navbar />
       <main>
         <HeroSection />
-        <LogoMarquee />
-        <HumanMachineDivide />
-        <MeetPals />
         <FeaturesGrid />
-        <PalsProfiles />
-        <HumanComputingCompany />
-        <CtaFooterTease />
+        <Problem />
+        <Solution />
+        <Modules />
+        <AgeGroup />
+        <CTA />
       </main>
       <Footer />
     </div>

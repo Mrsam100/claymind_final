@@ -37,13 +37,26 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables. Check console for details.');
 }
 
-// Create Supabase client
+// Create Supabase client with optimized settings
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
     storage: window.localStorage,
+  },
+  global: {
+    headers: {
+      'x-application-name': 'claymind-app',
+    },
+  },
+  db: {
+    schema: 'public',
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 10,
+    },
   },
 });
 
@@ -57,24 +70,108 @@ export const getCurrentUser = async () => {
 
 // Helper function to get user profile
 export const getUserProfile = async (userId: string) => {
+  console.log('[Supabase] getUserProfile called for:', userId);
+
   const { data, error } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', userId)
     .single();
 
-  if (error) throw error;
+  if (error) {
+    console.error('[Supabase] getUserProfile error:', error);
+    throw error;
+  }
+
+  console.log('[Supabase] getUserProfile success:', data?.email);
   return data;
 };
 
-// Helper function to get user progress
+// Helper function to get user progress (with auto-create if missing)
 export const getUserProgress = async (userId: string) => {
+  console.log('[Supabase] getUserProgress called for:', userId);
+
+  // First try to get existing progress
   const { data, error } = await supabase
     .from('user_progress')
     .select('*')
     .eq('user_id', userId)
     .single();
 
+  // If it doesn't exist (PGRST116 = no rows returned), create it
+  if (error?.code === 'PGRST116') {
+    console.log('[Supabase] user_progress not found, creating...');
+
+    const { data: newProgress, error: insertError } = await supabase
+      .from('user_progress')
+      .insert({
+        user_id: userId,
+        current_level: 1,
+        current_xp: 0,
+        total_xp_earned: 0,
+        current_streak_days: 0,
+        longest_streak_days: 0,
+        total_lessons_completed: 0,
+        total_modules_completed: 0,
+        total_time_spent_minutes: 0,
+        total_ai_creations: 0
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error('[Supabase] Failed to create user_progress:', insertError);
+      throw insertError;
+    }
+
+    console.log('[Supabase] user_progress created successfully');
+    return newProgress;
+  }
+
+  // If there's a different error, throw it
+  if (error) {
+    console.error('[Supabase] getUserProgress error:', error);
+    throw error;
+  }
+
+  console.log('[Supabase] getUserProgress success');
+  return data;
+};
+
+// Helper function to get all modules
+export const getModules = async () => {
+  const { data, error } = await supabase
+    .from('modules')
+    .select('*')
+    .eq('is_published', true)
+    .order('display_order', { ascending: true });
+
   if (error) throw error;
   return data;
+};
+
+// Helper function to get module detail with lessons
+export const getModuleDetail = async (moduleId: string) => {
+  // Get module info
+  const { data: moduleData, error: moduleError } = await supabase
+    .from('modules')
+    .select('*')
+    .eq('id', moduleId)
+    .single();
+
+  if (moduleError) throw moduleError;
+
+  // Get lessons for this module
+  const { data: lessonsData, error: lessonsError } = await supabase
+    .from('lessons')
+    .select('*')
+    .eq('module_id', moduleId)
+    .order('lesson_number', { ascending: true });
+
+  if (lessonsError) throw lessonsError;
+
+  return {
+    module: moduleData,
+    lessons: lessonsData || [],
+  };
 };

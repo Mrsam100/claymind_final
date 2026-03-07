@@ -26,15 +26,33 @@ export function AuthCallback() {
 
   async function handleCallback() {
     try {
+      console.log('[AuthCallback] Starting callback handler...');
+
+      // Check if there's already a session (OAuth might have set it automatically)
+      const { data: { session: existingSession } } = await supabase.auth.getSession();
+      console.log('[AuthCallback] Existing session check:', !!existingSession);
+
       // Get the token hash from URL
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       const accessToken = hashParams.get('access_token');
+      const refreshToken = hashParams.get('refresh_token');
       const type = searchParams.get('type');
       const errorCode = searchParams.get('error');
       const errorDescription = searchParams.get('error_description');
 
+      console.log('[AuthCallback] Processing callback:', {
+        hasAccessToken: !!accessToken,
+        hasRefreshToken: !!refreshToken,
+        hasExistingSession: !!existingSession,
+        type,
+        errorCode,
+        fullHash: window.location.hash,
+        fullSearch: window.location.search
+      });
+
       // Handle error in URL (expired link, etc.)
       if (errorCode) {
+        console.error('[AuthCallback] Error code detected:', errorCode, errorDescription);
         if (errorDescription?.includes('expired')) {
           setState('expired');
         } else {
@@ -44,8 +62,144 @@ export function AuthCallback() {
         return;
       }
 
-      // If this is a signup confirmation
-      if (type === 'signup' || accessToken) {
+      // If there's already a session but no tokens in URL, handle it directly
+      if (existingSession && !accessToken && !refreshToken && !type) {
+        console.log('[AuthCallback] Session already exists, processing directly...');
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('email_verified_at, onboarding_completed_at, role')
+          .eq('id', existingSession.user.id)
+          .single();
+
+        console.log('[AuthCallback] Profile loaded:', {
+          role: profile?.role,
+          emailVerified: !!profile?.email_verified_at,
+          onboardingCompleted: !!profile?.onboarding_completed_at
+        });
+
+        // Update profile if needed for OAuth users
+        const updates: any = {};
+        const now = new Date().toISOString();
+
+        if (!profile?.email_verified_at) {
+          updates.email_verified_at = now;
+        }
+        if (!profile?.onboarding_completed_at) {
+          updates.onboarding_completed_at = now;
+        }
+
+        if (Object.keys(updates).length > 0) {
+          console.log('[AuthCallback] Updating profile with:', updates);
+          await supabase
+            .from('profiles')
+            .update(updates)
+            .eq('id', existingSession.user.id);
+        }
+
+        setState('success');
+
+        // Wait longer to ensure AuthContext has time to process the session
+        console.log('[AuthCallback] Waiting for AuthContext to sync...');
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        const redirectPath = getDefaultRouteForRole({ role: profile?.role || 'student' } as any);
+        console.log('[AuthCallback] Redirecting to:', redirectPath);
+        window.location.href = redirectPath;
+        return;
+      }
+
+      // Handle OAuth callback (Google, etc.)
+      if (accessToken && refreshToken) {
+        console.log('[AuthCallback] OAuth tokens detected, exchanging for session...');
+
+        // Exchange tokens for session
+        const { data: { session }, error: sessionError } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+
+        if (sessionError) {
+          console.error('[AuthCallback] Session exchange error:', sessionError);
+          setState('error');
+          setErrorMessage(sessionError.message);
+          return;
+        }
+
+        console.log('[AuthCallback] Session exchange successful');
+
+        if (session?.user) {
+          console.log('[AuthCallback] Session established for user:', session.user.email);
+
+          // Check if profile exists and get info
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('email_verified_at, onboarding_completed_at, role')
+            .eq('id', session.user.id)
+            .single();
+
+          console.log('[AuthCallback] Profile status:', {
+            hasProfile: !!profile,
+            emailVerified: !!profile?.email_verified_at,
+            onboardingCompleted: !!profile?.onboarding_completed_at,
+            role: profile?.role
+          });
+
+          // For OAuth users, auto-verify email AND complete onboarding
+          const updates: any = {};
+          const now = new Date().toISOString();
+
+          if (!profile?.email_verified_at) {
+            updates.email_verified_at = now;
+          }
+
+          // Auto-complete onboarding for OAuth users (they've already verified via Google)
+          if (!profile?.onboarding_completed_at) {
+            updates.onboarding_completed_at = now;
+          }
+
+          // Update profile if needed
+          if (Object.keys(updates).length > 0) {
+            console.log('[AuthCallback] Updating profile with:', updates);
+            const { error: updateError } = await supabase
+              .from('profiles')
+              .update(updates)
+              .eq('id', session.user.id);
+
+            if (updateError) {
+              console.error('[AuthCallback] Profile update error:', updateError);
+            } else {
+              console.log('[AuthCallback] Profile updated successfully');
+            }
+          }
+
+          setState('success');
+
+          // Force a refresh of the auth state to pick up the updated profile
+          console.log('[AuthCallback] Triggering auth state refresh...');
+          const { data: refreshData } = await supabase.auth.refreshSession();
+          console.log('[AuthCallback] Session refreshed:', !!refreshData.session);
+
+          // Wait longer for auth state to fully sync across the app
+          console.log('[AuthCallback] Waiting for AuthContext to sync...');
+          await new Promise(resolve => setTimeout(resolve, 3000));
+
+          // Redirect to dashboard using window.location for guaranteed redirect
+          const redirectPath = getDefaultRouteForRole({ role: profile?.role || 'student' } as any);
+          console.log('[AuthCallback] FINAL REDIRECT to:', redirectPath);
+
+          // Use window.location.href for absolute guaranteed redirect
+          window.location.href = redirectPath;
+        } else {
+          setState('error');
+          setErrorMessage('No session found. Please try logging in.');
+        }
+        return;
+      }
+
+      // If this is an email verification callback
+      if (type === 'signup') {
+        console.log('[AuthCallback] Email verification callback detected');
         // Let Supabase handle the session
         const { data: { session }, error } = await supabase.auth.getSession();
 
@@ -85,11 +239,15 @@ export function AuthCallback() {
           setState('error');
           setErrorMessage('No session found. Please try logging in.');
         }
-      } else {
-        setState('error');
-        setErrorMessage('Invalid verification link.');
+        return;
       }
+
+      // No valid callback type detected
+      console.error('[AuthCallback] No valid callback detected. No tokens, no type.');
+      setState('error');
+      setErrorMessage('Invalid verification link.');
     } catch (error) {
+      console.error('[AuthCallback] Exception in handleCallback:', error);
       setState('error');
       setErrorMessage(error instanceof Error ? error.message : 'An unexpected error occurred');
     }
@@ -133,10 +291,10 @@ export function AuthCallback() {
             </div>
 
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Email Verified!
+              Welcome to ClayMind!
             </h1>
             <p className="text-gray-600 mb-6">
-              Your account has been successfully verified. You can now access all features!
+              Your account is ready. Taking you to your dashboard...
             </p>
 
             <div className="flex items-center justify-center space-x-2 text-sm text-purple-600">

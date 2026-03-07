@@ -9,11 +9,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion } from 'motion/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import { User, Mail, Lock, Calendar, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 import { Button3D } from '../../../app/components/3d-button';
 import { Card3D } from '../../../app/components/3d-card';
 import { FloatingMascot } from '../../../app/components/floating-mascot';
+import { GoogleSignInButton } from '../../../components/auth/GoogleSignInButton';
 import { useAuth } from '../../../hooks/useAuth';
 import { errorLoggingService } from '../../../lib/services/error-logging.service';
 
@@ -56,6 +56,7 @@ export function Signup() {
   const navigate = useNavigate();
   const { signup, signInWithGoogle, isLoading: authLoading } = useAuth();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const {
     register,
@@ -74,7 +75,7 @@ export function Signup() {
     },
   });
 
-  const isLoading = authLoading || isSubmitting;
+  const isLoading = authLoading || isSubmitting || isGoogleLoading;
   const userType = watch('userType');
 
   const onSubmit = async (data: SignupFormData) => {
@@ -107,24 +108,30 @@ export function Signup() {
     }
   };
 
-  const handleGoogleSuccess = async (response: CredentialResponse) => {
+  // Google OAuth handler
+  const handleGoogleSignIn = async () => {
     try {
       setSubmitError(null);
-      if (!response.credential) {
-        throw new Error('No credential received from Google');
-      }
+      setIsGoogleLoading(true);
 
-      await signInWithGoogle(response.credential);
-      navigate('/kid-dashboard');
+      errorLoggingService.addBreadcrumb({
+        category: 'auth',
+        message: 'Google OAuth signup attempt',
+        level: 'info',
+      });
+
+      console.log('[Signup] Initiating Google OAuth...');
+      await signInWithGoogle();
+      // Note: OAuth redirects to Google, so this component will unmount
+      // User will return to /auth/callback after Google authentication
+      console.log('[Signup] OAuth initiated successfully, redirecting to Google...');
     } catch (error) {
+      console.error('[Signup] OAuth failed:', error);
       const errorMessage =
         error instanceof Error ? error.message : 'Google Sign In failed. Please try again.';
       setSubmitError(errorMessage);
+      setIsGoogleLoading(false);
     }
-  };
-
-  const handleGoogleError = () => {
-    setSubmitError('Google Sign In failed. Please try again.');
   };
 
   return (
@@ -152,7 +159,7 @@ export function Signup() {
         <Card3D variant="default" hover={false}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Join ClayRock</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Join ClayMind</h2>
               <p className="text-gray-600">Start your AI learning adventure</p>
             </div>
 
@@ -227,34 +234,24 @@ export function Signup() {
               </motion.label>
             </div>
 
-            {/* Google Sign In - Temporarily Disabled */}
-            {/*
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-full flex items-center gap-4">
-                <div className="flex-1 h-px bg-gray-300" />
-                <span className="text-sm text-gray-500 font-medium">OR</span>
-                <div className="flex-1 h-px bg-gray-300" />
-              </div>
+            {/* Google Sign-In Button */}
+            <GoogleSignInButton
+              onClick={handleGoogleSignIn}
+              isLoading={isGoogleLoading}
+              disabled={isLoading}
+            />
 
-              <div className="w-full flex justify-center">
-                <GoogleLogin
-                  onSuccess={handleGoogleSuccess}
-                  onError={handleGoogleError}
-                  useOneTap
-                  text="signup_with"
-                  shape="pill"
-                  size="large"
-                  theme="outline"
-                />
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t-2 border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500 font-medium">
+                  Or sign up with email
+                </span>
               </div>
             </div>
-
-            <div className="flex items-center gap-4">
-              <div className="flex-1 h-px bg-gray-300" />
-              <span className="text-sm text-gray-500 font-medium">Or sign up with email</span>
-              <div className="flex-1 h-px bg-gray-300" />
-            </div>
-            */}
 
             {/* Form Fields */}
             <div className="space-y-4">

@@ -1,4 +1,4 @@
-# ClayRock Deployment Guide
+# ClayMind Deployment Guide
 
 ## 🚨 Quick Fix for Current Error
 
@@ -219,7 +219,7 @@ Save this as `deploy.sh`:
 ```bash
 #!/bin/bash
 
-echo "🏗️  Building ClayRock..."
+echo "🏗️  Building ClayMind..."
 npm run build
 
 echo "📦 Deploying to Vercel..."
@@ -284,7 +284,7 @@ If you're still getting errors:
 
 Your app is configured with:
 - **Supabase URL:** https://iqsgicgowgawmrijqxrd.supabase.co
-- **Project Name:** clayrock
+- **Project Name:** claymind
 - **Build Output:** `dist/`
 - **Framework:** React + Vite
 

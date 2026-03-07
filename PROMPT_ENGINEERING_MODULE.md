@@ -270,7 +270,7 @@ Each lesson includes a variety of content types:
 
 2. **Or Apply Manually:**
    ```sql
-   psql -U postgres -d clayrock -f supabase/migrations/00010_prompt_engineering_module.sql
+   psql -U postgres -d claymind -f supabase/migrations/00010_prompt_engineering_module.sql
    ```
 
 3. **Verify Installation:**
@@ -431,7 +431,7 @@ Planned additions:
 
 ## Credits
 
-**Curriculum Design:** ClayRock AI Learning Team
+**Curriculum Design:** ClayMind AI Learning Team
 **Target Audience:** Kids ages 8-14
 **Version:** 1.0
 **Last Updated:** 2026-01-11

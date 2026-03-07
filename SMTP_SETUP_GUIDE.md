@@ -2,7 +2,7 @@
 
 ## Complete Guide to Send Real Emails in Production
 
-This guide will help you set up SMTP so your ClayRock app can send **real verification emails** to any email address.
+This guide will help you set up SMTP so your ClayMind app can send **real verification emails** to any email address.
 
 ---
 
@@ -40,8 +40,8 @@ Fill in:
 ```
 Email: your-email@gmail.com
 Password: [Create a strong password]
-Company Name: ClayRock (or your company name)
-Website: clayrock.com (or your domain)
+Company Name: ClayMind (or your company name)
+Website: claymind.com (or your domain)
 ```
 
 **Click:** "Create Account"
@@ -75,7 +75,7 @@ Or direct link: https://app.sendgrid.com/settings/api_keys
 
 2. **Fill in details:**
    ```
-   API Key Name: ClayRock Production
+   API Key Name: ClayMind Production
    API Key Permissions: Full Access (recommended for simplicity)
    ```
 
@@ -112,7 +112,7 @@ Or: https://app.sendgrid.com/settings/sender_auth
 
 2. **Fill in form:**
    ```
-   From Name: ClayRock
+   From Name: ClayMind
    From Email Address: noreply@yourdomain.com
    Reply To: support@yourdomain.com (can be same as From)
    Company Address: Your address
@@ -123,7 +123,7 @@ Or: https://app.sendgrid.com/settings/sender_auth
    ⚠️ **Important:** Use an email you have access to!
 
    Options:
-   - **If you have a domain:** `noreply@clayrock.com`
+   - **If you have a domain:** `noreply@claymind.com`
    - **If you don't have a domain:** Use your Gmail for testing: `your-email@gmail.com`
 
 3. **Click:** "Create"
@@ -148,11 +148,11 @@ Or: https://app.sendgrid.com/settings/sender_auth
 
 ## ⚙️ Step 4: Configure Supabase
 
-Now let's configure your ClayRock app to use SendGrid!
+Now let's configure your ClayMind app to use SendGrid!
 
 ### 4.1 Update config.toml
 
-**File:** `clayrock/supabase/config.toml`
+**File:** `claymind/supabase/config.toml`
 
 **Find this section** (around line 213):
 
@@ -179,7 +179,7 @@ port = 587
 user = "apikey"
 pass = "env(SENDGRID_API_KEY)"
 admin_email = "noreply@yourdomain.com"  # ← Change to YOUR verified email
-sender_name = "ClayRock"
+sender_name = "ClayMind"
 ```
 
 ⚠️ **Replace:**
@@ -187,7 +187,7 @@ sender_name = "ClayRock"
 
 ### 4.2 Create Environment File
 
-**Create file:** `clayrock/.env.local`
+**Create file:** `claymind/.env.local`
 
 ```bash
 # SendGrid API Key
@@ -202,11 +202,11 @@ SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxx.yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 
 ```bash
 # Check if .gitignore exists
-cat clayrock/.gitignore | grep .env
+cat claymind/.gitignore | grep .env
 
 # If not there, add it:
-echo ".env.local" >> clayrock/.gitignore
-echo ".env.production" >> clayrock/.gitignore
+echo ".env.local" >> claymind/.gitignore
+echo ".env.production" >> claymind/.gitignore
 ```
 
 ⚠️ **NEVER commit your API key to git!**
@@ -218,7 +218,7 @@ echo ".env.production" >> clayrock/.gitignore
 For the changes to take effect:
 
 ```bash
-cd clayrock
+cd claymind
 
 # Stop Supabase
 supabase stop
@@ -255,7 +255,7 @@ This will reload the SMTP configuration.
 
 4. **Check your REAL inbox:**
    - ✅ You should receive an email within 30 seconds
-   - ✅ From: ClayRock <noreply@yourdomain.com>
+   - ✅ From: ClayMind <noreply@yourdomain.com>
    - ✅ Subject: "Confirm your signup"
 
 5. **Click verification link:**
@@ -338,7 +338,7 @@ SENDGRID_API_KEY=your_production_api_key_here
 
 ### 9.1 Create Custom HTML Template
 
-**Create:** `clayrock/supabase/templates/confirmation.html`
+**Create:** `claymind/supabase/templates/confirmation.html`
 
 ```html
 <!DOCTYPE html>
@@ -409,13 +409,13 @@ SENDGRID_API_KEY=your_production_api_key_here
 <body>
   <div class="container">
     <div class="header">
-      <h1>🎨 Welcome to ClayRock!</h1>
+      <h1>🎨 Welcome to ClayMind!</h1>
     </div>
 
     <div class="content">
       <h2>Hi there! 👋</h2>
 
-      <p>Thanks for joining ClayRock! We're excited to have you start your AI learning journey.</p>
+      <p>Thanks for joining ClayMind! We're excited to have you start your AI learning journey.</p>
 
       <p>Before we get started, we need to verify your email address. This helps us keep your account secure and ensure you receive important updates.</p>
 
@@ -433,15 +433,15 @@ SENDGRID_API_KEY=your_production_api_key_here
 
       <p><strong>⏰ This link will expire in 24 hours.</strong></p>
 
-      <p>If you didn't create an account with ClayRock, you can safely ignore this email.</p>
+      <p>If you didn't create an account with ClayMind, you can safely ignore this email.</p>
     </div>
 
     <div class="footer">
       <p>Happy learning! 🚀<br>
-      <strong>The ClayRock Team</strong></p>
+      <strong>The ClayMind Team</strong></p>
 
       <p style="margin-top: 20px;">
-        Questions? Contact us at support@clayrock.com
+        Questions? Contact us at support@claymind.com
       </p>
     </div>
   </div>
@@ -456,7 +456,7 @@ SENDGRID_API_KEY=your_production_api_key_here
 ```toml
 # Customize confirmation email template
 [auth.email.template.confirmation]
-subject = "🎨 Verify your ClayRock account"
+subject = "🎨 Verify your ClayMind account"
 content_path = "./supabase/templates/confirmation.html"
 ```
 
@@ -526,13 +526,13 @@ SENDGRID_API_KEY=SG.prod_key_xxx
 **Solution:**
 ```bash
 # Check .env.local exists
-ls -la clayrock/.env.local
+ls -la claymind/.env.local
 
 # Check it has the key
-cat clayrock/.env.local
+cat claymind/.env.local
 
 # Restart Supabase
-cd clayrock
+cd claymind
 supabase stop && supabase start
 ```
 
@@ -652,7 +652,7 @@ Before going to production:
 
 ## 🎉 You're Done!
 
-Your ClayRock app can now send real emails to any email address!
+Your ClayMind app can now send real emails to any email address!
 
 **Next steps:**
 1. Test thoroughly with different email providers (Gmail, Outlook, Yahoo)

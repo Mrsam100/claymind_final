@@ -3,9 +3,13 @@
  * Main dashboard for young learners with progress, modules, and badges
  */
 
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Play, Sparkles, Trophy, Star, Brain, User } from "lucide-react";
-import { Card, Button } from "../../../components/ui";
+import { Play, Sparkles, Trophy, Star, Brain, User, RefreshCw } from "lucide-react";
+import { Card, Button, LoadingState as LoadingStateUI, ErrorState } from "../../../components/ui";
+import { storageService } from "../../../lib/services/storage.service";
+import { modulesService } from "../../../lib/services/modules.service";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface KidDashboardProps {
   onContinueLearning: () => void;
@@ -13,25 +17,108 @@ interface KidDashboardProps {
   onViewProjects: () => void;
 }
 
-export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects }: KidDashboardProps) {
-  const badges = [
-    { icon: <Star className="w-6 h-6" />, label: "First Steps", unlocked: true },
-    { icon: <Brain className="w-6 h-6" />, label: "AI Explorer", unlocked: true },
-    { icon: <Sparkles className="w-6 h-6" />, label: "Creative Mind", unlocked: true },
-    { icon: <Trophy className="w-6 h-6" />, label: "Champion", unlocked: false },
-  ];
+type LoadingStatus = 'loading' | 'success' | 'error';
 
-  const currentModule = {
-    title: "Build an App with AI",
-    progress: 60,
-    nextLesson: "Creating a Chatbot",
+export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects }: KidDashboardProps) {
+  const { user } = useAuth();
+  const [loadingState, setLoadingState] = useState<LoadingStatus>('loading');
+  const [error, setError] = useState<string | null>(null);
+  const [dashboardData, setDashboardData] = useState<{
+    badges: Array<{ icon: React.ReactNode; label: string; unlocked: boolean }>;
+    currentModule: { title: string; progress: number; nextLesson: string } | null;
+    stats: Array<{ label: string; value: string; color: string }>;
+    level: number;
+    levelProgress: number;
+    username: string;
+  } | null>(null);
+
+  const loadDashboard = async () => {
+    try {
+      setLoadingState('loading');
+      setError(null);
+
+      const progress = storageService.getProgress();
+      const storedBadges = storageService.getBadges();
+
+      // Try to get current module progress
+      let currentModule: { title: string; progress: number; nextLesson: string } | null = null;
+      try {
+        const modules = await modulesService.getModules();
+        const inProgress = modules.find((m) => m.progress > 0 && m.progress < 100);
+        const firstUnstarted = modules.find((m) => m.progress === 0 && !m.locked);
+        const active = inProgress || firstUnstarted;
+        if (active) {
+          currentModule = {
+            title: active.title,
+            progress: active.progress,
+            nextLesson: active.progress === 0 ? 'Start your first lesson' : 'Continue learning',
+          };
+        }
+      } catch {
+        // Non-critical, dashboard still works without module data
+      }
+
+      const badgeList = storedBadges.length > 0
+        ? storedBadges.slice(0, 4).map((b) => ({
+            icon: <Star className="w-6 h-6" />,
+            label: b.name,
+            unlocked: true,
+          }))
+        : [
+            { icon: <Star className="w-6 h-6" />, label: "First Steps", unlocked: false },
+            { icon: <Brain className="w-6 h-6" />, label: "AI Explorer", unlocked: false },
+            { icon: <Sparkles className="w-6 h-6" />, label: "Creative Mind", unlocked: false },
+            { icon: <Trophy className="w-6 h-6" />, label: "Champion", unlocked: false },
+          ];
+
+      setDashboardData({
+        badges: badgeList,
+        currentModule: currentModule || {
+          title: "Start Your AI Journey",
+          progress: 0,
+          nextLesson: "Explore the modules to begin!",
+        },
+        stats: [
+          { label: "Lessons Done", value: String(progress.lessonsCompleted), color: "text-[var(--color-purple-600)]" },
+          { label: "Total XP", value: String(progress.totalXp), color: "text-[var(--color-amber-600)]" },
+          { label: "Badges", value: String(storedBadges.length), color: "text-[var(--color-slate-600)]" },
+        ],
+        level: progress.currentLevel,
+        levelProgress: progress.xpRequiredForNextLevel > 0
+          ? Math.round(((progress.xpRequiredForNextLevel - progress.xpToNextLevel) / progress.xpRequiredForNextLevel) * 100)
+          : 0,
+        username: user?.username || user?.displayName || 'Explorer',
+      });
+      setLoadingState('success');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load dashboard');
+      setLoadingState('error');
+    }
   };
 
-  const stats = [
-    { label: "Lessons Completed", value: "24", color: "text-[var(--color-purple-600)]" },
-    { label: "Projects Built", value: "8", color: "text-[var(--color-amber-600)]" },
-    { label: "Badges Earned", value: "12", color: "text-[var(--color-slate-600)]" },
-  ];
+  useEffect(() => {
+    loadDashboard();
+  }, []);
+
+  if (loadingState === 'loading') {
+    return <LoadingStateUI message="Loading your dashboard..." size="lg" fullPage />;
+  }
+
+  if (loadingState === 'error') {
+    return (
+      <ErrorState
+        title="Couldn't load dashboard"
+        message={error || 'Something went wrong'}
+        onRetry={loadDashboard}
+        icon={<RefreshCw className="w-8 h-8 text-[var(--color-error)]" />}
+        fullPage
+      />
+    );
+  }
+
+  if (!dashboardData) return null;
+
+  const { badges, currentModule, stats } = dashboardData;
 
   return (
     <div className="min-h-screen bg-[var(--color-zinc-50)] p-6">
@@ -49,7 +136,7 @@ export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-white mb-1">
-                    Welcome back, Explorer!
+                    Welcome back, {dashboardData.username}!
                   </h1>
                   <p className="text-white/80">
                     Ready to continue your AI adventure?
@@ -57,8 +144,8 @@ export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects
                 </div>
               </div>
               <div className="text-center bg-white/20 px-4 py-2 rounded-lg">
-                <div className="text-2xl font-bold text-white">Level 8</div>
-                <div className="text-sm text-white/80">65% to next</div>
+                <div className="text-2xl font-bold text-white">Level {dashboardData.level}</div>
+                <div className="text-sm text-white/80">{dashboardData.levelProgress}% to next</div>
               </div>
             </div>
           </Card>
@@ -180,7 +267,7 @@ export function KidDashboard({ onContinueLearning, onViewModules, onViewProjects
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-[var(--color-slate-900)]">Your Badges</h2>
-                <span className="text-[var(--color-purple-600)] text-sm">12 / 20 Unlocked</span>
+                <span className="text-[var(--color-purple-600)] text-sm">{badges.filter(b => b.unlocked).length} / {badges.length} Unlocked</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

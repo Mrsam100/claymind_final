@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useTransform } from "motion/react";
-import { useRef, MouseEvent, ReactNode } from "react";
+import { useRef, MouseEvent, TouchEvent, ReactNode, useCallback } from "react";
 import { LucideIcon } from "lucide-react";
 
 interface Card3DProps {
@@ -115,16 +115,25 @@ export function Card3D({
   const rotateX = useTransform(mouseY, [-0.5, 0.5], hover === "tilt" ? [12, -12] : [0, 0]);
   const rotateY = useTransform(mouseX, [-0.5, 0.5], hover === "tilt" ? [-12, 12] : [0, 0]);
 
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+  const updateTilt = useCallback((clientX: number, clientY: number) => {
     if (!cardRef.current || hover === "none" || locked) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    const x = (clientX - rect.left) / rect.width - 0.5;
+    const y = (clientY - rect.top) / rect.height - 0.5;
     mouseX.set(x);
     mouseY.set(y);
+  }, [hover, locked, mouseX, mouseY]);
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    updateTilt(e.clientX, e.clientY);
   };
 
-  const handleMouseLeave = () => {
+  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    if (touch) updateTilt(touch.clientX, touch.clientY);
+  };
+
+  const resetTilt = () => {
     mouseX.set(0);
     mouseY.set(0);
   };
@@ -166,7 +175,9 @@ export function Card3D({
         perspective: "1000px",
       }}
       onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseLeave={resetTilt}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={resetTilt}
       onClick={!locked ? onClick : undefined}
       whileHover={getHoverAnimation()}
       animate={{

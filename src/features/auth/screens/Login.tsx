@@ -13,6 +13,7 @@ import { Mail, Lock, AlertCircle, Loader2, Zap } from 'lucide-react';
 import { Button3D } from '../../../app/components/3d-button';
 import { Card3D } from '../../../app/components/3d-card';
 import { FloatingMascot } from '../../../app/components/floating-mascot';
+import { GoogleSignInButton } from '../../../components/auth/GoogleSignInButton';
 import { useAuth } from '../../../hooks/useAuth';
 import { errorLoggingService } from '../../../lib/services/error-logging.service';
 
@@ -32,8 +33,9 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export function Login() {
   const navigate = useNavigate();
-  const { login, testLogin, isLoading: authLoading } = useAuth();
+  const { login, signInWithGoogle, testLogin, isLoading: authLoading } = useAuth();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const {
     register,
@@ -47,7 +49,7 @@ export function Login() {
     },
   });
 
-  const isLoading = authLoading || isSubmitting;
+  const isLoading = authLoading || isSubmitting || isGoogleLoading;
 
   // Show test login in development mode OR if explicitly enabled
   const isDevelopment = import.meta.env.DEV;
@@ -74,6 +76,32 @@ export function Login() {
       const errorMessage =
         error instanceof Error ? error.message : 'Login failed. Please try again.';
       setSubmitError(errorMessage);
+    }
+  };
+
+  // Google OAuth handler
+  const handleGoogleSignIn = async () => {
+    try {
+      setSubmitError(null);
+      setIsGoogleLoading(true);
+
+      errorLoggingService.addBreadcrumb({
+        category: 'auth',
+        message: 'Google OAuth attempt',
+        level: 'info',
+      });
+
+      console.log('[Login] Initiating Google OAuth...');
+      await signInWithGoogle();
+      // Note: OAuth redirects to Google, so this component will unmount
+      // User will return to /auth/callback after Google authentication
+      console.log('[Login] OAuth initiated successfully, redirecting to Google...');
+    } catch (error) {
+      console.error('[Login] OAuth failed:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Google Sign In failed. Please try again.';
+      setSubmitError(errorMessage);
+      setIsGoogleLoading(false);
     }
   };
 
@@ -129,6 +157,25 @@ export function Login() {
                 </div>
               </motion.div>
             )}
+
+            {/* Google Sign-In Button */}
+            <GoogleSignInButton
+              onClick={handleGoogleSignIn}
+              isLoading={isGoogleLoading}
+              disabled={isLoading}
+            />
+
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t-2 border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500 font-medium">
+                  Or continue with email
+                </span>
+              </div>
+            </div>
 
             {/* Form Fields */}
             <div className="space-y-4">

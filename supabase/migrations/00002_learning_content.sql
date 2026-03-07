@@ -1,4 +1,4 @@
--- ClayRock Learning Content Schema
+-- ClayMind Learning Content Schema
 -- Description: Modules, lessons, and learning content
 -- Date: 2025-01-01
 

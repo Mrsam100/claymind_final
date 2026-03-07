@@ -40,7 +40,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       // First check for test user in localStorage (development only)
       if (import.meta.env.DEV) {
-        const testUserData = localStorage.getItem('clayrock_test_user');
+        const testUserData = localStorage.getItem('claymind_test_user');
         if (testUserData) {
           const testUser = JSON.parse(testUserData) as User;
           setUser(testUser);
@@ -137,7 +137,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setLoading(true);
 
       // Clear test user if present
-      localStorage.removeItem('clayrock_test_user');
+      localStorage.removeItem('claymind_test_user');
 
       await authService.logout();
       setUser(null);
@@ -147,7 +147,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(null);
       errorLoggingService.clearUser();
       // Make sure to clear test user even on error
-      localStorage.removeItem('clayrock_test_user');
+      localStorage.removeItem('claymind_test_user');
     } finally {
       setLoading(false);
     }
@@ -165,7 +165,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const now = new Date().toISOString();
       const mockUser: User = {
         id: 'test-user-' + Date.now(),
-        email: 'test@clayrock.com',
+        email: 'test@claymind.com',
         firstName: 'Test',
         lastName: 'User',
         displayName: 'Test User',
@@ -182,7 +182,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       };
 
       // Store in localStorage for persistence
-      localStorage.setItem('clayrock_test_user', JSON.stringify(mockUser));
+      localStorage.setItem('claymind_test_user', JSON.stringify(mockUser));
 
       setUser(mockUser);
       errorLoggingService.setUser({ id: mockUser.id, email: mockUser.email });
@@ -205,19 +205,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     checkAuth();
 
-    // Listen for auth state changes (session refresh, logout from another tab, etc.)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    // Listen for auth state changes (session refresh, logout from another tab, OAuth callback, etc.)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('[AuthContext] Auth state changed:', event, session?.user?.email);
+
       if (session?.user) {
-        const currentUser = await authService.getCurrentUser();
-        setUser(currentUser);
-        if (currentUser) {
-          errorLoggingService.setUser({ id: currentUser.id, email: currentUser.email });
+        // Add delay for profile to be updated (especially important for OAuth)
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+          console.log('[AuthContext] Waiting for profile updates...');
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        try {
+          const currentUser = await authService.getCurrentUser();
+          console.log('[AuthContext] User loaded:', currentUser?.email, {
+            emailVerified: !!currentUser?.emailVerifiedAt,
+            onboardingCompleted: !!currentUser?.onboardingCompletedAt
+          });
+          setUser(currentUser);
+          if (currentUser) {
+            errorLoggingService.setUser({ id: currentUser.id, email: currentUser.email });
+          }
+        } catch (error) {
+          console.error('[AuthContext] Error loading user:', error);
+          setUser(null);
+        } finally {
+          setLoading(false);
         }
       } else {
         setUser(null);
         errorLoggingService.clearUser();
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => {

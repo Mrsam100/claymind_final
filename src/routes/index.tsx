@@ -4,7 +4,8 @@
  */
 
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { Loader } from '../app/components/Loader';
 import { ProtectedRoute } from './ProtectedRoute';
 import { AppLayout } from '../app/components/AppLayout';
@@ -33,6 +34,11 @@ const AuthCallback = lazy(() => import('../pages/AuthCallback').then(m => ({ def
 // Onboarding
 const Onboarding = lazy(() => import('../features/onboarding').then(m => ({ default: m.Onboarding })));
 
+// Legal pages
+const PrivacyPolicyPage = lazy(() => import('../features/new-landing/pages/PrivacyPolicyPage'));
+const TermsOfServicePage = lazy(() => import('../features/new-landing/pages/TermsOfServicePage'));
+const SafetyPolicyPage = lazy(() => import('../features/new-landing/pages/SafetyPolicyPage'));
+
 
 
 function AuthWrapper() {
@@ -48,6 +54,8 @@ function AuthWrapper() {
 
 function KidDashboardWrapper() {
   const navigate = useNavigate();
+  console.log('[KidDashboardWrapper] Rendering dashboard');
+
   return (
     <KidDashboard
       onContinueLearning={() => navigate('/modules')}
@@ -73,8 +81,18 @@ function ModuleDetailWrapper() {
 }
 
 export function AppRoutes() {
+  const location = useLocation();
+
   return (
-    <Routes>
+    <AnimatePresence mode="wait">
+    <motion.div
+      key={location.pathname}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+    >
+    <Routes location={location}>
       {/* Public Routes */}
       <Route 
         path="/" 
@@ -408,7 +426,7 @@ export function AppRoutes() {
         path="/privacy"
         element={
           <Suspense fallback={<Loader fullScreen message="Loading..." />}>
-            <ComingSoonPage title="Privacy Policy" />
+            <PrivacyPolicyPage />
           </Suspense>
         }
       />
@@ -416,7 +434,7 @@ export function AppRoutes() {
         path="/terms"
         element={
           <Suspense fallback={<Loader fullScreen message="Loading..." />}>
-            <ComingSoonPage title="Terms of Service" />
+            <TermsOfServicePage />
           </Suspense>
         }
       />
@@ -424,7 +442,7 @@ export function AppRoutes() {
         path="/safety-policy"
         element={
           <Suspense fallback={<Loader fullScreen message="Loading..." />}>
-            <ComingSoonPage title="Safety Policy" />
+            <SafetyPolicyPage />
           </Suspense>
         }
       />
@@ -516,5 +534,7 @@ export function AppRoutes() {
       {/* Catch all - redirect to home */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </motion.div>
+    </AnimatePresence>
   );
 }

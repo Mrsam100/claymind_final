@@ -3,6 +3,8 @@
  * Provides tactile and audio feedback for UI interactions
  */
 
+import { useState } from "react";
+
 // ==================== HAPTIC FEEDBACK ====================
 
 export type HapticPattern = "light" | "medium" | "heavy" | "success" | "warning" | "error";
@@ -462,7 +464,7 @@ export const unlockFeedback = () => {
 
 // ==================== PREFERENCES ====================
 
-const STORAGE_KEY = "clayrock_audio_preferences";
+const STORAGE_KEY = "claymind_audio_preferences";
 
 interface AudioPreferences {
   soundEnabled: boolean;
@@ -550,5 +552,3 @@ export const useAudioPreferences = () => {
   };
 };
 
-// Import useState at the top
-import { useState } from "react";

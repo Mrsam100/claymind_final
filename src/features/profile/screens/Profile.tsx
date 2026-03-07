@@ -40,10 +40,10 @@ const BADGE_ICONS: Record<string, React.ReactNode> = {
 const AVATAR_COLORS: Record<string, string> = {
   purple: 'bg-[var(--color-purple-500)]',
   amber: 'bg-[var(--color-amber-500)]',
-  pink: 'bg-[var(--color-slate-500)]',
-  blue: 'bg-[var(--color-purple-600)]',
-  green: 'bg-[var(--color-purple-400)]',
-  red: 'bg-[var(--color-amber-600)]',
+  pink: 'bg-pink-500',
+  blue: 'bg-blue-500',
+  green: 'bg-green-500',
+  red: 'bg-red-500',
 };
 
 export function Profile() {

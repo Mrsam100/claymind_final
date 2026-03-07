@@ -1,6 +1,6 @@
 /**
  * Role-Based Access Control (RBAC) Utilities
- * Centralized role checking for ClayRock
+ * Centralized role checking for ClayMind
  */
 
 import type { User } from '../types/api';
@@ -121,10 +121,10 @@ export function getDefaultRouteForRole(user: User | null): string {
     case 'teacher':
       return '/teacher/dashboard';
     case 'parent':
-      return '/parent/dashboard';
+      return '/parent-dashboard';
     case 'student':
     default:
-      return '/dashboard';
+      return '/kid-dashboard';
   }
 }
 

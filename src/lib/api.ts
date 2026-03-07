@@ -8,6 +8,7 @@ import { config } from './config';
 import { errorLoggingService } from './services/error-logging.service';
 import { authService } from './services/auth.service';
 import { storageService } from './services/storage.service';
+import { supabase, getModules as getModulesFromSupabase, getModuleDetail as getModuleDetailFromSupabase } from './supabase';
 import type {
   AuthResponse,
   LoginRequest,
@@ -27,6 +28,87 @@ import type {
   ApiError,
   ApiResponse,
 } from './types/api';
+
+// ==================== Fallback Data ====================
+// Used when Supabase is unavailable or has no data
+
+const FALLBACK_MODULES: Module[] = [
+  { id: 'ai-basics', title: 'AI Basics', description: 'Learn what AI is and how it works', difficulty: 1, lessons: 8, duration: '120 min', color: 'purple', locked: false, progress: 0, totalLessons: 8 },
+  { id: 'ml-mini', title: 'Mini Machine Learning', description: 'Train your own AI models', difficulty: 2, lessons: 8, duration: '180 min', color: 'green', locked: false, progress: 0, totalLessons: 8 },
+  { id: 'build-app', title: 'Build an App with AI', description: 'Create your first AI-powered application', difficulty: 2, lessons: 12, duration: '240 min', color: 'amber', locked: false, progress: 0, totalLessons: 12 },
+  { id: 'prompt-engineering', title: 'Prompt Engineering', description: 'Master the art of talking to AI', difficulty: 2, lessons: 10, duration: '180 min', color: 'pink', locked: false, progress: 0, totalLessons: 10 },
+  { id: 'ethics-safety', title: 'Ethics & Safety AI', description: 'Learn to use AI responsibly and safely', difficulty: 2, lessons: 8, duration: '150 min', color: 'blue', locked: false, progress: 0, totalLessons: 8 },
+];
+
+const FALLBACK_LESSONS: Record<string, Array<{ id: string; title: string; estimated_duration_minutes: number; is_locked_by_default: boolean }>> = {
+  'ai-basics': [
+    { id: 'ai-basics-1', title: 'What is AI?', estimated_duration_minutes: 15, is_locked_by_default: false },
+    { id: 'ai-basics-2', title: 'How Computers Learn', estimated_duration_minutes: 20, is_locked_by_default: false },
+    { id: 'ai-basics-3', title: 'Neural Networks', estimated_duration_minutes: 20, is_locked_by_default: false },
+    { id: 'ai-basics-4', title: 'Training an AI', estimated_duration_minutes: 25, is_locked_by_default: true },
+    { id: 'ai-basics-5', title: 'AI in Daily Life', estimated_duration_minutes: 15, is_locked_by_default: true },
+    { id: 'ai-basics-6', title: 'Image Recognition', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'ai-basics-7', title: 'Natural Language', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'ai-basics-8', title: 'Final Project', estimated_duration_minutes: 30, is_locked_by_default: true },
+  ],
+  'ml-mini': [
+    { id: 'ml-mini-1', title: 'What is Machine Learning?', estimated_duration_minutes: 20, is_locked_by_default: false },
+    { id: 'ml-mini-2', title: 'Training Data', estimated_duration_minutes: 25, is_locked_by_default: false },
+    { id: 'ml-mini-3', title: 'Your First Model', estimated_duration_minutes: 30, is_locked_by_default: true },
+    { id: 'ml-mini-4', title: 'Testing & Accuracy', estimated_duration_minutes: 25, is_locked_by_default: true },
+    { id: 'ml-mini-5', title: 'Improving Models', estimated_duration_minutes: 30, is_locked_by_default: true },
+    { id: 'ml-mini-6', title: 'Types of Learning', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'ml-mini-7', title: 'Real Projects', estimated_duration_minutes: 35, is_locked_by_default: true },
+    { id: 'ml-mini-8', title: 'ML Master Badge', estimated_duration_minutes: 25, is_locked_by_default: true },
+  ],
+  'build-app': [
+    { id: 'build-app-1', title: 'Planning Your App', estimated_duration_minutes: 20, is_locked_by_default: false },
+    { id: 'build-app-2', title: 'Setting Up', estimated_duration_minutes: 25, is_locked_by_default: false },
+    { id: 'build-app-3', title: 'First AI Call', estimated_duration_minutes: 30, is_locked_by_default: true },
+    { id: 'build-app-4', title: 'Building UI', estimated_duration_minutes: 35, is_locked_by_default: true },
+    { id: 'build-app-5', title: 'Adding Features', estimated_duration_minutes: 30, is_locked_by_default: true },
+    { id: 'build-app-6', title: 'Error Handling', estimated_duration_minutes: 25, is_locked_by_default: true },
+    { id: 'build-app-7', title: 'Testing', estimated_duration_minutes: 30, is_locked_by_default: true },
+    { id: 'build-app-8', title: 'Polish & Style', estimated_duration_minutes: 25, is_locked_by_default: true },
+    { id: 'build-app-9', title: 'Deployment Prep', estimated_duration_minutes: 30, is_locked_by_default: true },
+    { id: 'build-app-10', title: 'Going Live', estimated_duration_minutes: 35, is_locked_by_default: true },
+    { id: 'build-app-11', title: 'User Feedback', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'build-app-12', title: 'Final Showcase', estimated_duration_minutes: 40, is_locked_by_default: true },
+  ],
+  'prompt-engineering': [
+    { id: 'prompt-eng-1', title: 'What is a Prompt?', estimated_duration_minutes: 15, is_locked_by_default: false },
+    { id: 'prompt-eng-2', title: 'Being Clear and Specific', estimated_duration_minutes: 20, is_locked_by_default: false },
+    { id: 'prompt-eng-3', title: 'Adding Context', estimated_duration_minutes: 20, is_locked_by_default: false },
+    { id: 'prompt-eng-4', title: 'Examples and Patterns', estimated_duration_minutes: 25, is_locked_by_default: true },
+    { id: 'prompt-eng-5', title: 'Role Playing', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'prompt-eng-6', title: 'Step-by-Step Thinking', estimated_duration_minutes: 25, is_locked_by_default: true },
+    { id: 'prompt-eng-7', title: 'Formatting Outputs', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'prompt-eng-8', title: 'Refining and Iterating', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'prompt-eng-9', title: 'Advanced Techniques', estimated_duration_minutes: 25, is_locked_by_default: true },
+    { id: 'prompt-eng-10', title: 'Final Project', estimated_duration_minutes: 30, is_locked_by_default: true },
+  ],
+  'ethics-safety': [
+    { id: 'ethics-1', title: 'What is AI Ethics?', estimated_duration_minutes: 15, is_locked_by_default: false },
+    { id: 'ethics-2', title: 'Fairness and Bias', estimated_duration_minutes: 20, is_locked_by_default: false },
+    { id: 'ethics-3', title: 'Privacy Matters', estimated_duration_minutes: 20, is_locked_by_default: false },
+    { id: 'ethics-4', title: 'AI and Truth', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'ethics-5', title: 'Responsible AI Use', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'ethics-6', title: 'AI and Environment', estimated_duration_minutes: 15, is_locked_by_default: true },
+    { id: 'ethics-7', title: 'Future of AI', estimated_duration_minutes: 20, is_locked_by_default: true },
+    { id: 'ethics-8', title: 'Be an AI Guardian', estimated_duration_minutes: 20, is_locked_by_default: true },
+  ],
+};
+
+/** Race a promise against a timeout. Rejects if the timeout fires first. */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`Timed out after ${ms}ms`)), ms);
+    promise.then(
+      (val) => { clearTimeout(timer); resolve(val); },
+      (err) => { clearTimeout(timer); reject(err); },
+    );
+  });
+}
 
 class ApiClient {
   private client: AxiosInstance;
@@ -242,7 +324,6 @@ class ApiClient {
     // Use real authentication service
     const result = await authService.signup({
       firstName: data.firstName,
-      lastName: data.lastName,
       email: data.email,
       password: data.password,
       age: data.age,
@@ -266,7 +347,7 @@ class ApiClient {
       accessToken: result.accessToken || '',
       refreshToken: result.refreshToken || '',
       user: result.user,
-      message: 'Account created successfully! Welcome to ClayRock!',
+      message: 'Account created successfully! Welcome to ClayMind!',
     };
   }
 
@@ -289,7 +370,7 @@ class ApiClient {
    * Get current user profile - REAL DATA
    */
   async getUserProfile(): Promise<User> {
-    const user = authService.getCurrentUser();
+    const user = await authService.getCurrentUser();
     if (!user) {
       throw new Error('Not authenticated');
     }
@@ -330,108 +411,116 @@ class ApiClient {
   // ==================== Modules Endpoints ====================
 
   /**
-   * Get all modules - WITH REAL PROGRESS
+   * Get all modules - FROM SUPABASE WITH FALLBACK
    */
   async getModules(): Promise<Module[]> {
     // Get real progress from storage
     const moduleProgress = storageService.getModuleProgress();
 
-    // Define all available modules
-    const modules: Module[] = [
-      {
-        id: 'ai-basics',
-        title: 'AI Basics',
-        description: 'Learn what AI is and how it works',
-        difficulty: 1,
-        lessons: 8,
-        duration: '2 hours',
-        color: 'purple',
-        locked: false,
-        progress: moduleProgress['ai-basics']?.progress || 0,
-        totalLessons: 8,
-      },
-      {
-        id: 'ml-mini',
-        title: 'Mini Machine Learning',
-        description: 'Train your own AI models',
-        difficulty: 2,
-        lessons: 8,
-        duration: '3 hours',
-        color: 'green',
-        locked: false,
-        progress: moduleProgress['ml-mini']?.progress || 0,
-        totalLessons: 8,
-      },
-      {
-        id: 'build-app',
-        title: 'Build an App with AI',
-        description: 'Create your first AI-powered application',
-        difficulty: 2,
-        lessons: 12,
-        duration: '4 hours',
-        color: 'amber',
-        locked: false,
-        progress: moduleProgress['build-app']?.progress || 0,
-        totalLessons: 12,
-      },
-      {
-        id: 'prompt-engineering',
-        title: 'Prompt Engineering',
-        description: 'Master the art of talking to AI',
-        difficulty: 2,
-        lessons: 10,
-        duration: '3 hours',
-        color: 'pink',
-        locked: false,
-        progress: moduleProgress['prompt-engineering']?.progress || 0,
-        totalLessons: 10,
-      },
-      {
-        id: 'ethics-safety',
-        title: 'Ethics & Safety AI',
-        description: 'Learn to use AI responsibly and safely',
-        difficulty: 2,
-        lessons: 8,
-        duration: '2.5 hours',
-        color: 'blue',
-        locked: false,
-        progress: moduleProgress['ethics-safety']?.progress || 0,
-        totalLessons: 8,
-      },
-    ];
+    const difficultyMap: Record<string, number> = {
+      'beginner': 1,
+      'intermediate': 2,
+      'advanced': 3,
+    };
 
-    return modules;
+    try {
+      const supabaseModules = await withTimeout(getModulesFromSupabase(), 3000);
+
+      if (supabaseModules && supabaseModules.length > 0) {
+        return supabaseModules.map((mod: any) => ({
+          id: mod.id,
+          title: mod.title,
+          description: mod.description,
+          difficulty: difficultyMap[mod.difficulty] || 2,
+          lessons: mod.total_lessons || 0,
+          duration: `${mod.estimated_duration_minutes || 120} min`,
+          color: mod.color || 'purple',
+          locked: false,
+          progress: moduleProgress[mod.id]?.progress || 0,
+          totalLessons: mod.total_lessons || 0,
+        }));
+      }
+    } catch (error) {
+      console.warn('Supabase modules fetch failed, using fallback data:', error);
+    }
+
+    // Fallback: return hardcoded modules when DB is empty or unavailable
+    return FALLBACK_MODULES.map((mod) => ({
+      ...mod,
+      progress: moduleProgress[mod.id]?.progress || 0,
+    }));
   }
 
   /**
-   * Get module detail by ID
+   * Get module detail by ID - FROM SUPABASE WITH FALLBACK
    */
   async getModuleDetail(moduleId: string): Promise<ModuleDetail> {
-    return this.stubRequest<ModuleDetail>(
-      () => this.client.get(`/modules/${moduleId}`),
-      {
-        id: moduleId,
-        title: 'Build an App with AI',
-        description: 'Create your first AI-powered application',
-        progress: 60,
-        totalLessons: 12,
-        completedLessons: 4,
-        lessons: [
-          { id: '1', title: 'Introduction to AI Apps', duration: '15 min', completed: true, locked: false },
-          { id: '2', title: 'Understanding APIs', duration: '20 min', completed: true, locked: false },
-          { id: '3', title: 'Your First AI Request', duration: '25 min', completed: true, locked: false },
-          { id: '4', title: 'Building the Interface', duration: '30 min', completed: true, locked: false },
-          { id: '5', title: 'Creating a Chatbot', duration: '35 min', completed: false, locked: false, current: true },
-          { id: '6', title: 'Adding Voice Features', duration: '30 min', completed: false, locked: false },
-          { id: '7', title: 'Image Recognition', duration: '40 min', completed: false, locked: false },
-          { id: '8', title: 'Data Processing', duration: '35 min', completed: false, locked: true },
-          { id: '9', title: 'Testing Your App', duration: '25 min', completed: false, locked: true },
-          { id: '10', title: 'Improving Performance', duration: '30 min', completed: false, locked: true },
-          { id: '11', title: 'Adding Polish', duration: '20 min', completed: false, locked: true },
-          { id: '12', title: 'Final Project', duration: '45 min', completed: false, locked: true },
-        ],
+    const completedLessonIds = storageService.getCompletedLessonsForModule(moduleId);
+    const completedSet = new Set(completedLessonIds);
+
+    let moduleInfo: { id: string; title: string; description: string } | null = null;
+    let rawLessons: Array<{ id: string; title: string; estimated_duration_minutes?: number; is_locked_by_default?: boolean }> = [];
+
+    // Try Supabase first
+    try {
+      const { module, lessons } = await withTimeout(getModuleDetailFromSupabase(moduleId), 3000);
+      if (module && lessons && lessons.length > 0) {
+        moduleInfo = module;
+        rawLessons = lessons;
       }
-    );
+    } catch (error) {
+      console.warn(`Supabase module detail fetch failed for ${moduleId}, using fallback:`, error);
+    }
+
+    // Fallback to hardcoded data if Supabase returned nothing
+    if (!moduleInfo || rawLessons.length === 0) {
+      const fallbackModule = FALLBACK_MODULES.find((m) => m.id === moduleId);
+      const fallbackLessons = FALLBACK_LESSONS[moduleId];
+
+      if (!fallbackModule || !fallbackLessons) {
+        throw new Error(`Module "${moduleId}" not found`);
+      }
+
+      moduleInfo = { id: fallbackModule.id, title: fallbackModule.title, description: fallbackModule.description };
+      rawLessons = fallbackLessons;
+    }
+
+    // Find last completed lesson index for unlock logic
+    let lastCompletedIndex = -1;
+    rawLessons.forEach((l: any, idx: number) => {
+      if (completedSet.has(l.id)) {
+        lastCompletedIndex = idx;
+      }
+    });
+
+    // Transform lessons
+    const transformedLessons = rawLessons.map((lesson: any, idx: number) => {
+      const isCompleted = completedSet.has(lesson.id);
+      const isLocked = lesson.is_locked_by_default && idx > lastCompletedIndex + 3;
+
+      return {
+        id: lesson.id,
+        title: lesson.title,
+        duration: `${lesson.estimated_duration_minutes || 20} min`,
+        completed: isCompleted,
+        locked: isLocked,
+      };
+    });
+
+    const completedCount = transformedLessons.filter((l: any) => l.completed).length;
+    const progress = transformedLessons.length > 0
+      ? Math.round((completedCount / transformedLessons.length) * 100)
+      : 0;
+
+    return {
+      id: moduleInfo.id,
+      title: moduleInfo.title,
+      description: moduleInfo.description,
+      progress,
+      totalLessons: transformedLessons.length,
+      completedLessons: completedCount,
+      lessons: transformedLessons,
+    };
   }
 
   // ==================== Projects Endpoints ====================
@@ -535,13 +624,13 @@ class ApiClient {
    * Send contact form message
    */
   async sendContactMessage(data: ContactFormData): Promise<ContactResponse> {
-    return this.stubRequest<ContactResponse>(
-      () => this.client.post('/contact', data),
-      {
-        success: true,
-        message: 'Your message has been sent successfully. We will get back to you soon!',
-      }
-    );
+    const { data: result, error } = await supabase.functions.invoke('send-contact-email', {
+      body: { name: data.name, email: data.email, subject: data.subject, message: data.message },
+    });
+
+    if (error) throw new Error(error.message || 'Failed to send message');
+
+    return { success: result.success, message: result.message };
   }
 
   /**
@@ -556,7 +645,7 @@ class ApiClient {
           answer: 'Just sign up, choose a module that interests you, and start with the first lesson!',
         },
         {
-          question: 'Is ClayRock really safe for kids?',
+          question: 'Is ClayMind really safe for kids?',
           answer: 'Yes! We have content filters, parental controls, and all activities are monitored to ensure a safe learning environment.',
         },
         {
@@ -600,8 +689,6 @@ class ApiClient {
   ): Promise<T> {
     // In development, return mock data immediately
     if (config.app.isDev) {
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 300 + Math.random() * 200));
       return mockData;
     }
 

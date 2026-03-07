@@ -5,7 +5,7 @@
 ### 1. Start the Development Server
 
 ```bash
-cd /home/meowsaki/clayrock/ClaymindAi
+cd /home/meowsaki/claymind/ClaymindAi
 npm run dev
 ```
 

@@ -480,7 +480,7 @@ For questions, issues, or suggestions:
 
 ## License & Attribution
 
-This educational content is designed for ClayRock - AI Learning Platform for Kids.
+This educational content is designed for ClayMind - AI Learning Platform for Kids.
 
 When using or adapting this content:
 - Maintain educational integrity

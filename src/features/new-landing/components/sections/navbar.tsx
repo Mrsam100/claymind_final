@@ -1,116 +1,123 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ChevronDown, ArrowRight } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'motion/react';
+import { Sparkles, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../../../../app/components/ui/button';
 
-/**
- * Navbar component cloned with pixel-perfect accuracy following the provided design system.
- * Implements retro-OS aesthetics with hard borders and brutalist shadows.
- */
+const navItems = [
+  { name: 'Modules', href: '#modules' },
+  { name: 'Age Groups', href: '#ages' },
+  { name: 'About', href: '#about' },
+  { name: 'Contact', href: '#contact' },
+];
+
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const { scrollY } = useScroll();
+  const backgroundColor = useTransform(
+    scrollY,
+    [0, 100],
+    ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.95)']
+  );
+  const borderColor = useTransform(
+    scrollY,
+    [0, 100],
+    ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.1)']
+  );
+
+  const handleNavClick = (href: string) => {
+    setIsOpen(false);
+    const el = document.querySelector(href);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <header className="navbar_component bg-[#F1EEE9] border-b border-black sticky top-0 z-[1000] w-full h-[80px] flex items-center">
-        <div className="container mx-auto px-6 flex items-center justify-between">
-          {/* Logo Section */}
-          <div className="flex items-center">
-            <Link to="/" className="navbar-logo relative block">
-              <span className="font-sans font-black text-[24px] tracking-tighter text-black flex items-center">
-                <span className="text-[28px] mr-1">◹</span>CLAYMINDAI
-              </span>
-            </Link>
-          </div>
-
-          {/* Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-1">
-            <Link
-              to="/pals"
-              className="flex items-center px-4 py-2 hover:bg-[#F7F4EF] transition-colors"
-            >
-              <span className="bg-[#FF6B8B] text-black text-[10px] uppercase font-bold px-1.5 py-0.5 border border-black mr-2 leading-none">
-                Beta
-              </span>
-              <span className="font-sans font-semibold text-[14px] uppercase tracking-wide">Buddies</span>
-            </Link>
-
-            {/* Learning Dropdown */}
-            <div className="relative group px-4 py-2 cursor-pointer hover:bg-[#F7F4EF] transition-colors">
-              <div className="flex items-center">
-                <span className="font-sans font-semibold text-[14px] uppercase tracking-wide">Learning</span>
-                <ChevronDown className="ml-1.5 w-4 h-4" />
-              </div>
-              {/* Dropdown Content */}
-              <div className="absolute top-full left-0 w-64 bg-[#F7F4EF] border-2 border-black opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mt-2 shadow-[6px_6px_0px_#000000]">
-                <div className="flex flex-col">
-                  <DropdownItem to="/subjects/math" label="Math" />
-                  <DropdownItem to="/subjects/science" label="Science" />
-                  <DropdownItem to="/subjects/history" label="History" />
-                  <DropdownItem to="/subjects/coding" label="Coding" />
-                </div>
-              </div>
-            </div>
-
-            {/* Parents Dropdown */}
-            <div className="relative group px-4 py-2 cursor-pointer hover:bg-[#F7F4EF] transition-colors">
-              <div className="flex items-center">
-                <span className="font-sans font-semibold text-[14px] uppercase tracking-wide">Parents</span>
-                <ChevronDown className="ml-1.5 w-4 h-4" />
-              </div>
-              <div className="absolute top-full left-0 w-64 bg-[#F7F4EF] border-2 border-black opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mt-2 shadow-[6px_6px_0px_#000000]">
-                <div className="flex flex-col">
-                  <DropdownItem to="/parents/safety" label="Safety & Privacy" />
-                  <DropdownItem to="/parents/guide" label="Getting Started" />
-                  <DropdownItem to="/parents/success-stories" label="Success Stories" />
-                </div>
-              </div>
-            </div>
-
-            <Link to="/research" className="px-4 py-2 hover:bg-[#F7F4EF] transition-colors font-sans font-semibold text-[14px] uppercase tracking-wide">
-              Research
-            </Link>
-            <Link to="/pricing" className="px-4 py-2 hover:bg-[#F7F4EF] transition-colors font-sans font-semibold text-[14px] uppercase tracking-wide">
-              Pricing
-            </Link>
-          </nav>
-
-        {/* Action Buttons */}
-        <div className="flex items-center space-x-4">
-          <div className="relative group hidden sm:block">
-            <Link
-              to="/login"
-              className="font-sans font-semibold text-[14px] uppercase tracking-wide px-4 py-2 border-2 border-transparent hover:border-black transition-all"
-            >
-              Login
-            </Link>
-          </div>
-
-          <Link
-            to="/signup"
-            className="bg-[#FF6B8B] border-2 border-black px-6 py-2 shadow-[6px_6px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[4px_4px_0px_#000000] transition-all"
+    <motion.nav
+      style={{
+        backgroundColor,
+        borderBottomWidth: 1,
+        borderBottomColor: borderColor,
+      }}
+      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          <motion.div
+            className="flex items-center gap-2 cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <span className="font-sans font-bold text-[14px] uppercase tracking-wider text-black">
-              Get Started
-            </span>
-          </Link>
+            <motion.div
+              className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center"
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Sparkles className="w-6 h-6 text-white" />
+            </motion.div>
+            <span className="text-2xl font-bold text-gray-900">claymind</span>
+          </motion.div>
 
-          {/* Mobile Menu Icon */}
-          <button className="lg:hidden flex flex-col space-y-1.5 p-2">
-            <div className="w-6 h-0.5 bg-black"></div>
-            <div className="w-6 h-0.5 bg-black"></div>
-            <div className="w-6 h-0.5 bg-black"></div>
-          </button>
+          <div className="hidden md:flex items-center gap-8">
+            {navItems.map((item, index) => (
+              <motion.button
+                key={index}
+                onClick={() => handleNavClick(item.href)}
+                className="text-gray-700 hover:text-purple-600 font-medium transition-colors bg-transparent border-none cursor-pointer"
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0 }}
+              >
+                {item.name}
+              </motion.button>
+            ))}
+            <Button
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+              onClick={() => navigate('/signup')}
+            >
+              Get Started
+            </Button>
+          </div>
+
+          <motion.button
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 bg-transparent border-none cursor-pointer"
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="w-6 h-6 text-gray-700" /> : <Menu className="w-6 h-6 text-gray-700" />}
+          </motion.button>
         </div>
       </div>
-    </header>
-  );
-}
 
-function DropdownItem({ to, label }: { to: string; label: string }) {
-  return (
-    <Link
-      to={to}
-      className="flex items-center justify-between px-6 py-4 border-b border-black last:border-b-0 hover:bg-[#FF6B8B] transition-colors group/item"
-    >
-      <span className="font-sans font-semibold text-[12px] uppercase tracking-widest">{label}</span>
-      <ArrowRight className="w-4 h-4 opacity-0 group-hover/item:opacity-100 transition-opacity" />
-    </Link>
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+        className="md:hidden overflow-hidden bg-white border-t border-gray-200"
+      >
+        <div className="px-4 py-6 space-y-4">
+          {navItems.map((item, index) => (
+            <motion.button
+              key={index}
+              onClick={() => handleNavClick(item.href)}
+              className="block text-gray-700 hover:text-purple-600 font-medium transition-colors py-2 bg-transparent border-none cursor-pointer w-full text-left"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: isOpen ? 1 : 0, x: isOpen ? 0 : -20 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+            >
+              {item.name}
+            </motion.button>
+          ))}
+          <Button
+            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+            onClick={() => navigate('/signup')}
+          >
+            Get Started
+          </Button>
+        </div>
+      </motion.div>
+    </motion.nav>
   );
 }

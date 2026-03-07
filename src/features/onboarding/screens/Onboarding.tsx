@@ -3,10 +3,11 @@
  * Main orchestrator for the 3-step onboarding flow
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { getUserRole, getDefaultRouteForRole } from '../../../lib/utils/rbac';
+
 import { onboardingService } from '../../../lib/services/onboarding.service';
 import { OnboardingWizard } from '../components/OnboardingWizard';
 import { ProfileSetupStep } from '../components/ProfileSetupStep';
@@ -17,7 +18,7 @@ import { Loader } from '../../../app/components/Loader';
 export function Onboarding() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, checkAuth } = useAuth();
   const [saving, setSaving] = useState(false);
   const [checkingStatus, setCheckingStatus] = useState(true);
 
@@ -63,16 +64,9 @@ export function Onboarding() {
       // Mark onboarding as complete in database
       await onboardingService.completeOnboarding(user.id);
 
-      // Refresh auth context to get updated user data
-      // This ensures the onboardingCompletedAt field is updated in the user object
-      // so ProtectedRoute won't redirect back to onboarding
-      if (window.location) {
-        // Force a full page refresh to reload user context
-        // This is the most reliable way to ensure all state is fresh
-        window.location.href = getDefaultRouteForRole(user);
-      } else {
-        navigate(getDefaultRouteForRole(user));
-      }
+      // Refresh auth context to get updated user data with onboardingCompletedAt
+      await checkAuth();
+      navigate(getDefaultRouteForRole(user), { replace: true });
     } catch (error) {
       console.error('Error completing onboarding:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to complete onboarding';

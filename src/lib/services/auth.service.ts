@@ -36,29 +36,57 @@ export class AuthService {
    * Convert Supabase user + profile to app User type
    */
   private async mapToAppUser(supabaseUser: SupabaseUser): Promise<User> {
-    const profile = await getUserProfile(supabaseUser.id);
-    const progress = await getUserProgress(supabaseUser.id).catch(() => null);
+    console.log('[AuthService] mapToAppUser - fetching profile for:', supabaseUser.id);
 
-    return {
-      id: profile.id,
-      firstName: profile.first_name,
-      lastName: profile.last_name || undefined,
-      email: profile.email,
-      age: profile.age || undefined,
-      level: progress?.current_level || 1,
-      avatarUrl: profile.avatar_url || `/avatars/default-${(profile.age || 1) % 5 + 1}.png`,
-      accountStatus: profile.account_status,
-      username: profile.username || undefined,
-      displayName: profile.display_name || profile.first_name,
-      joinedDate: new Date(profile.created_at).toLocaleDateString('en-US', {
-        month: 'short',
-        year: 'numeric'
-      }),
-      role: profile.role,
-      emailVerifiedAt: profile.email_verified_at || undefined,
-      onboardingCompletedAt: profile.onboarding_completed_at || undefined,
-      bio: profile.bio || undefined,
-    };
+    try {
+      // Add timeout to prevent hanging forever
+      const profilePromise = getUserProfile(supabaseUser.id);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 5000)
+      );
+
+      const profile = await Promise.race([profilePromise, timeoutPromise]) as any;
+      console.log('[AuthService] Profile fetched successfully:', profile.email);
+
+      // Fetch progress with timeout
+      console.log('[AuthService] Fetching user progress...');
+      const progressPromise = getUserProgress(supabaseUser.id);
+      const progressTimeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Progress fetch timeout')), 5000)
+      );
+
+      const progress = await Promise.race([progressPromise, progressTimeout])
+        .catch((error) => {
+          console.warn('[AuthService] Progress fetch failed:', error.message);
+          return null;
+        }) as any;
+
+      console.log('[AuthService] Progress fetched:', !!progress);
+
+      return {
+        id: profile.id,
+        firstName: profile.first_name,
+        lastName: profile.last_name || undefined,
+        email: profile.email,
+        age: profile.age || undefined,
+        level: progress?.current_level || 1,
+        avatarUrl: profile.avatar_url || `/avatars/default-${(profile.age || 1) % 5 + 1}.png`,
+        accountStatus: profile.account_status,
+        username: profile.username || undefined,
+        displayName: profile.display_name || profile.first_name,
+        joinedDate: new Date(profile.created_at).toLocaleDateString('en-US', {
+          month: 'short',
+          year: 'numeric'
+        }),
+        role: profile.role,
+        emailVerifiedAt: profile.email_verified_at || undefined,
+        onboardingCompletedAt: profile.onboarding_completed_at || undefined,
+        bio: profile.bio || undefined,
+      };
+    } catch (error) {
+      console.error('[AuthService] mapToAppUser failed:', error);
+      throw error;
+    }
   }
 
   /**

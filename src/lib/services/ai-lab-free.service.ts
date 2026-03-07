@@ -1,6 +1,6 @@
 /**
- * AI Lab Free Service - Production Ready
- * Uses FREE APIs: Google Gemini + Pollinations.ai
+ * AI Lab Service - Production Ready
+ * Uses Google Gemini API for AI generation
  */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -28,8 +28,8 @@ export interface GenerateOptions {
 }
 
 class AILabFreeService {
-  private model = genAI?.getGenerativeModel({ model: 'gemini-pro' });
-  private historyKey = 'clayrock_ai_lab_history';
+  private model = genAI?.getGenerativeModel({ model: 'gemini-2.5-flash' });
+  private historyKey = 'claymind_ai_lab_history';
   private maxHistoryItems = 50;
 
   /**
@@ -58,21 +58,24 @@ class AILabFreeService {
   private async generateWebapp(prompt: string): Promise<CreationResult> {
     if (!this.model) throw new Error('AI model not initialized');
 
-    const enhancedPrompt = `You are a friendly coding teacher for kids aged 8-16.
+    const enhancedPrompt = `You are an expert web developer creating apps for kids aged 8-16.
 Create a COMPLETE, working, interactive HTML file for: "${prompt}"
 
 CRITICAL REQUIREMENTS:
-- Single self-contained HTML file with embedded CSS and JavaScript
-- Colorful, playful, kid-friendly design with gradients and animations
-- Use fun emojis and large, clear text
-- Make it INTERACTIVE and FUN
-- Include helpful comments explaining the code
-- Use only HTML, CSS, and vanilla JavaScript (no external libraries)
-- Add smooth animations and hover effects
-- Make buttons and interactive elements BIG and easy to click
-- Use bright, cheerful colors
+- Single self-contained HTML file with ALL CSS in a <style> tag and ALL JavaScript in a <script> tag
+- Must include <!DOCTYPE html>, <html>, <head> with charset and viewport meta tags, and <body>
+- Colorful, playful, kid-friendly design with modern CSS gradients, shadows, and animations
+- Use fun emojis and large, readable text (minimum 16px body font)
+- Make it highly INTERACTIVE - respond to clicks, inputs, hover, etc.
+- Use only HTML, CSS, and vanilla JavaScript (NO external libraries, NO CDN links)
+- Add CSS transitions and keyframe animations for polish
+- Make all interactive elements large (min 44px touch targets) and accessible
+- Use a vibrant color palette with good contrast
+- Ensure the app works correctly - test your logic mentally before outputting
+- Handle edge cases (empty inputs, invalid states) gracefully
+- Make the layout responsive using flexbox or grid
 
-IMPORTANT: Return ONLY the complete HTML code, nothing else. No markdown, no explanations.`;
+IMPORTANT: Return ONLY the raw HTML code. No markdown code fences, no backticks, no explanations before or after.`;
 
     try {
       const result = await this.model.generateContent(enhancedPrompt);
@@ -92,9 +95,10 @@ IMPORTANT: Return ONLY the complete HTML code, nothing else. No markdown, no exp
 
       this.addToHistory(creation);
       return creation;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Webapp generation error:', error);
-      throw new Error('Failed to generate webapp. Please try again!');
+      const message = error?.message || 'Failed to generate webapp. Please try again!';
+      throw new Error(message);
     }
   }
 
@@ -134,9 +138,10 @@ Be the coolest, most helpful AI teacher ever! 🌟`;
 
       this.addToHistory(creation);
       return creation;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Chat error:', error);
-      throw new Error('Failed to chat with AI. Please try again!');
+      const message = error?.message || 'Failed to chat with AI. Please try again!';
+      throw new Error(message);
     }
   }
 
@@ -144,18 +149,35 @@ Be the coolest, most helpful AI teacher ever! 🌟`;
    * Clean code output from AI
    */
   private cleanCode(code: string): string {
-    // Remove markdown code blocks
-    code = code.replace(/```html\n?/gi, '');
-    code = code.replace(/```\n?/g, '');
+    // Remove markdown code fences (```html ... ``` or ``` ... ```)
+    code = code.replace(/^```[\w]*\n?/gm, '');
+    code = code.replace(/\n?```$/gm, '');
 
-    // Ensure proper HTML structure
+    // Trim leading/trailing whitespace
+    code = code.trim();
+
+    // If the model returned extra text before the HTML, extract just the HTML
+    const doctypeIndex = code.indexOf('<!DOCTYPE');
+    const htmlIndex = code.indexOf('<html');
+    const startIndex = doctypeIndex >= 0 ? doctypeIndex : htmlIndex;
+    if (startIndex > 0) {
+      code = code.substring(startIndex);
+    }
+
+    // Trim any trailing text after </html>
+    const htmlEndIndex = code.lastIndexOf('</html>');
+    if (htmlEndIndex >= 0) {
+      code = code.substring(0, htmlEndIndex + '</html>'.length);
+    }
+
+    // Ensure proper HTML structure if missing
     if (!code.includes('<!DOCTYPE') && !code.includes('<html')) {
       code = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClayRock Creation</title>
+  <title>ClayMind Creation</title>
 </head>
 <body>
 ${code}

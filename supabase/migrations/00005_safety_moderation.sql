@@ -1,4 +1,4 @@
--- ClayRock Safety & Moderation Schema
+-- ClayMind Safety & Moderation Schema
 -- Description: Content flags, activity logs, safety monitoring
 -- Date: 2025-01-01
 

@@ -1,4 +1,4 @@
--- ClayRock AI Lab Schema
+-- ClayMind AI Lab Schema
 -- Description: AI-generated content, user creations, and generation history
 -- Date: 2025-01-01
 

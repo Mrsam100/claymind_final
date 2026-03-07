@@ -22,6 +22,8 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isLargeScreen = useMediaQuery('(min-width: 1024px)');
   const { user, logout } = useAuth();
 
+  console.log('[AppLayout] Rendering with user:', user?.email, 'at path:', location.pathname);
+
   // Determine if user is a kid (could be based on user data or route)
   const isKid = location.pathname.startsWith('/kid') || !location.pathname.startsWith('/parent');
 

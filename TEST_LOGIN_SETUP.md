@@ -35,14 +35,14 @@ That's it! No setup, no credentials, no configuration needed.
    ```typescript
    {
      id: 'test-user-[timestamp]',
-     email: 'test@clayrock.com',
+     email: 'test@claymind.com',
      name: 'Test User',
      role: 'kid',
      emailVerified: true
    }
    ```
 
-2. Stores it in `localStorage` under `clayrock_test_user`
+2. Stores it in `localStorage` under `claymind_test_user`
 
 3. Sets the user in the auth context
 
@@ -92,7 +92,7 @@ The test login:
 ```typescript
 const mockUser: User = {
   id: 'test-user-' + Date.now(),
-  email: 'test@clayrock.com',
+  email: 'test@claymind.com',
   name: 'Test User',
   role: 'kid',
   avatarUrl: null,
@@ -131,13 +131,13 @@ npm run build && npm run preview  # ❌ Test login hidden
 **Fix:** Check browser localStorage:
 1. Open DevTools (F12)
 2. Go to Application → Local Storage
-3. Check for `clayrock_test_user` key
+3. Check for `claymind_test_user` key
 4. If missing, click test login again
 
 ### Can't Logout
 **Fix:** Use the logout button or manually clear:
 ```javascript
-localStorage.removeItem('clayrock_test_user');
+localStorage.removeItem('claymind_test_user');
 ```
 
 ## Customization
